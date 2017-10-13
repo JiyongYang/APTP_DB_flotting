@@ -15,8 +15,8 @@ namespace APTP_DB_flotting_project
         [STAThread]
         static void Main()
         {
-            mySqlLinkage _mySqlLinkage = new mySqlLinkage();
-            _mySqlLinkage.SelectUsingReader();
+            //mySqlLinkage _mySqlLinkage = new mySqlLinkage();
+            //_mySqlLinkage.SelectUsingReader();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
