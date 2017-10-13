@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\user\Documents\Git\APTP_DB_flotting\APTP_DB_flotting_project\obj\Debug\APTP_DB_flotting_project.Properties.Resources.resources
 C:\Users\user\Documents\Git\APTP_DB_flotting\APTP_DB_flotting_project\obj\Debug\APTP_DB_flotting_project.Visualizer.resources
 C:\Users\user\Documents\Git\APTP_DB_flotting\APTP_DB_flotting_project\obj\Debug\APTP_DB_flotting_project.csproj.GenerateResource.Cache
@@ -32,3 +33,17 @@ C:\Users\user\Documents\Git\APTP_DB_flotting\APTP_DB_flotting_project\bin\Debug\
 C:\Users\user\Documents\Git\APTP_DB_flotting\APTP_DB_flotting_project\obj\Debug\APTP_DB_flotting_project.exe
 C:\Users\user\Documents\Git\APTP_DB_flotting\APTP_DB_flotting_project\obj\Debug\APTP_DB_flotting_project.pdb
 C:\Users\user\Documents\Git\APTP_DB_flotting\APTP_DB_flotting_project\obj\Debug\APTP_DB_flotting_project.csprojResolveAssemblyReference.cache
+=======
+C:\Users\Server\projects\aptp_project\APTP_DB_flotting\APTP_DB_flotting_project\bin\Debug\APTP_DB_flotting_project.exe.config
+C:\Users\Server\projects\aptp_project\APTP_DB_flotting\APTP_DB_flotting_project\bin\Debug\APTP_DB_flotting_project.exe
+C:\Users\Server\projects\aptp_project\APTP_DB_flotting\APTP_DB_flotting_project\bin\Debug\APTP_DB_flotting_project.pdb
+C:\Users\Server\projects\aptp_project\APTP_DB_flotting\APTP_DB_flotting_project\bin\Debug\MySql.Data.dll
+C:\Users\Server\projects\aptp_project\APTP_DB_flotting\APTP_DB_flotting_project\bin\Debug\MySql.Data.xml
+C:\Users\Server\projects\aptp_project\APTP_DB_flotting\APTP_DB_flotting_project\obj\Debug\APTP_DB_flotting_project.csprojResolveAssemblyReference.cache
+C:\Users\Server\projects\aptp_project\APTP_DB_flotting\APTP_DB_flotting_project\obj\Debug\APTP_DB_flotting_project.Form1.resources
+C:\Users\Server\projects\aptp_project\APTP_DB_flotting\APTP_DB_flotting_project\obj\Debug\APTP_DB_flotting_project.Properties.Resources.resources
+C:\Users\Server\projects\aptp_project\APTP_DB_flotting\APTP_DB_flotting_project\obj\Debug\APTP_DB_flotting_project.csproj.GenerateResource.Cache
+C:\Users\Server\projects\aptp_project\APTP_DB_flotting\APTP_DB_flotting_project\obj\Debug\APTP_DB_flotting_project.csproj.CoreCompileInputs.cache
+C:\Users\Server\projects\aptp_project\APTP_DB_flotting\APTP_DB_flotting_project\obj\Debug\APTP_DB_flotting_project.exe
+C:\Users\Server\projects\aptp_project\APTP_DB_flotting\APTP_DB_flotting_project\obj\Debug\APTP_DB_flotting_project.pdb
+>>>>>>> master

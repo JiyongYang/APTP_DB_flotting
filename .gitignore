@@ -1,0 +1,10 @@
+*.cache
+**/*.cache
+
+APTP_DB_flotting_project/bin/Debug/APTP_DB_flotting_project\.exe
+
+APTP_DB_flotting_project/bin/Debug/
+
+APTP_DB_flotting_project/obj/Debug/APTP_DB_flotting_project\.csproj\.FileListAbsolute\.txt
+
+APTP_DB_flotting_project/obj/Debug/
