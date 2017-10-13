@@ -184,5 +184,6 @@ namespace APTP_DB_flotting_project
 
             }
         }
+        private mySqlLinkage msl;
     }
 }
