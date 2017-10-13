@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <Reference Include="Interop.SHDocVw">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Nevron Software\Nevron .NET Vision 2017.1 for VS2017\Bin\Interop.SHDocVw.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -88,6 +89,8 @@
       <HintPath>..\..\..\..\..\..\Program Files (x86)\MySQL\MySQL Connector Net 6.9.9\Assemblies\v4.5\MySql.Data.dll</HintPath>
 >>>>>>> master
     </Reference>
+=======
+>>>>>>> parent of be960a6... Add View, line graph api
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -101,15 +104,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Visualizer.cs">
+    <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Visualizer.Designer.cs">
-      <DependentUpon>Visualizer.cs</DependentUpon>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="mySqlLinkage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+<<<<<<< HEAD
 <<<<<<< HEAD
     <EmbeddedResource Include="Properties\licenses.licx" />
 =======
@@ -117,6 +121,8 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
 >>>>>>> master
+=======
+>>>>>>> parent of be960a6... Add View, line graph api
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -126,9 +132,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Visualizer.resx">
-      <DependentUpon>Visualizer.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
