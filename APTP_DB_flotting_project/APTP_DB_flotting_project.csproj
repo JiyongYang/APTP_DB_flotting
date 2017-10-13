@@ -32,6 +32,53 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Interop.SHDocVw">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Nevron Software\Nevron .NET Vision 2017.1 for VS2017\Bin\Interop.SHDocVw.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Nevron.Chart, Version=17.10.5.12, Culture=neutral, PublicKeyToken=2961c51bb98125d2, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Nevron Software\Nevron .NET Vision 2017.1 for VS2017\Bin\Nevron.Chart.dll</HintPath>
+    </Reference>
+    <Reference Include="Nevron.Chart.WinForm, Version=17.10.5.12, Culture=neutral, PublicKeyToken=c9bd8998e981e4ee, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Nevron Software\Nevron .NET Vision 2017.1 for VS2017\Bin\Nevron.Chart.WinForm.dll</HintPath>
+    </Reference>
+    <Reference Include="Nevron.Diagram, Version=17.10.5.12, Culture=neutral, PublicKeyToken=58d0c39aedb7cb73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Nevron Software\Nevron .NET Vision 2017.1 for VS2017\Bin\Nevron.Diagram.dll</HintPath>
+    </Reference>
+    <Reference Include="Nevron.Diagram.Shapes, Version=17.10.5.12, Culture=neutral, PublicKeyToken=532a56b211affb14, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Nevron Software\Nevron .NET Vision 2017.1 for VS2017\Bin\Nevron.Diagram.Shapes.dll</HintPath>
+    </Reference>
+    <Reference Include="Nevron.Diagram.WinForm, Version=17.10.5.12, Culture=neutral, PublicKeyToken=8232c9976c3abc48, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Nevron Software\Nevron .NET Vision 2017.1 for VS2017\Bin\Nevron.Diagram.WinForm.dll</HintPath>
+    </Reference>
+    <Reference Include="Nevron.Examples.Framework.WinForm">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Nevron Software\Nevron .NET Vision 2017.1 for VS2017\Bin\Nevron.Examples.Framework.WinForm.dll</HintPath>
+    </Reference>
+    <Reference Include="Nevron.GraphicsGL, Version=17.10.5.12, Culture=neutral, PublicKeyToken=2f17c6a71f852d32, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Nevron Software\Nevron .NET Vision 2017.1 for VS2017\Bin\Nevron.GraphicsGL.dll</HintPath>
+    </Reference>
+    <Reference Include="Nevron.Presentation, Version=17.10.5.12, Culture=neutral, PublicKeyToken=6656c5d1103e75cc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Nevron Software\Nevron .NET Vision 2017.1 for VS2017\Bin\Nevron.Presentation.dll</HintPath>
+    </Reference>
+    <Reference Include="Nevron.System, Version=17.10.5.12, Culture=neutral, PublicKeyToken=6a987feae5e496fd, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Nevron Software\Nevron .NET Vision 2017.1 for VS2017\Bin\Nevron.System.dll</HintPath>
+    </Reference>
+    <Reference Include="Nevron.UI.WinForm.Docking, Version=17.10.5.12, Culture=neutral, PublicKeyToken=446d8963349a628a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Nevron Software\Nevron .NET Vision 2017.1 for VS2017\Bin\Nevron.UI.WinForm.Docking.dll</HintPath>
+    </Reference>
+    <Reference Include="Nevron.UI.WinForm.Skins, Version=17.10.5.12, Culture=neutral, PublicKeyToken=231d012f86497c6a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Nevron Software\Nevron .NET Vision 2017.1 for VS2017\Bin\Nevron.UI.WinForm.Skins.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,14 +92,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="Visualizer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Visualizer.Designer.cs">
+      <DependentUpon>Visualizer.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -62,6 +110,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Visualizer.resx">
+      <DependentUpon>Visualizer.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
