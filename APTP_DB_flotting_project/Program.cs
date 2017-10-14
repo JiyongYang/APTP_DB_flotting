@@ -15,12 +15,13 @@ namespace APTP_DB_flotting_project
         [STAThread]
         static void Main()
         {
-            //mySqlLinkage _mySqlLinkage = new mySqlLinkage();
-            //_mySqlLinkage.SelectUsingReader();
+            mySqlLinkage _mySqlLinkage = new mySqlLinkage();
+            _mySqlLinkage.FakeDataGenerator();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Visualizer form = new Visualizer();
+            //Visualizer form = new Visualizer();
+            RealTimeLineChart form = new RealTimeLineChart(_mySqlLinkage.list_BPM);
             Application.Run(form);
         }
 

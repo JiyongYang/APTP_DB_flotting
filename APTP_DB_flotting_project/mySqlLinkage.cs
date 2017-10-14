@@ -7,7 +7,7 @@ using MySql.Data.MySqlClient;
 
 namespace APTP_DB_flotting_project
 {
-    struct ACC
+    public struct ACC
     {
         public int user_idx;
         public double x;
@@ -25,7 +25,7 @@ namespace APTP_DB_flotting_project
         }
     }
 
-    struct BPM
+    public struct BPM
     {
         public int user_idx;
         public int bpm;
@@ -39,7 +39,7 @@ namespace APTP_DB_flotting_project
         }
     }
 
-    struct RRI
+    public struct RRI
     {
         public int user_idx;
         public int rri;
@@ -53,7 +53,7 @@ namespace APTP_DB_flotting_project
         }
     }
 
-    struct USER
+    public struct USER
     {
         public int idx;
         public string email;
@@ -80,10 +80,10 @@ namespace APTP_DB_flotting_project
 
     class mySqlLinkage
     {
-        List<ACC> list_ACC = new List<ACC>();
-        List<BPM> list_BPM = new List<BPM>();
-        List<RRI> list_RRI = new List<RRI>();
-        List<USER> list_USER = new List<USER>();
+        public List<ACC> list_ACC = new List<ACC>();
+        public List<BPM> list_BPM = new List<BPM>();
+        public List<RRI> list_RRI = new List<RRI>();
+        public List<USER> list_USER = new List<USER>();
 
         public void SelectUsingReader()
         {
