@@ -180,5 +180,72 @@ namespace APTP_DB_flotting_project
                 //conn.Close();
             }
         }
+
+        public void FakeDataGenerator()
+        {
+            Random r = new Random();
+            // ACC data
+            {
+                for (int h = 0; h < 24; h++)
+                {
+                    for (int m = 0; m < 60; m++)
+                    {
+                        for (int s = 0; s < 60; s++)
+                        {
+                            int user_idx = 1;
+                            double x = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
+                            double y = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
+                            double z = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
+                            DateTime timestamp = new DateTime(2017, 10, 14, h, m, s);
+                            list_ACC.Add(new ACC(user_idx, x, y, z, timestamp));
+                        }
+                    }
+                }
+            }
+
+            {
+                for (int h = 0; h < 24; h++)
+                {
+                    for (int m = 0; m < 60; m++)
+                    {
+                        for (int s = 0; s < 60; s++)
+                        {
+                            int user_idx = 1;
+                            int bpm = r.Next(50, 110);
+                            DateTime timestamp = new DateTime(2017, 10, 14, h, m, s);
+                            list_BPM.Add(new BPM(user_idx, bpm, timestamp));
+                        }
+                    }
+                }
+            }
+
+            {
+                for (int h = 0; h < 24; h++)
+                {
+                    for (int m = 0; m < 60; m++)
+                    {
+                        for (int s = 0; s < 60; s++)
+                        {
+                            int user_idx = 1;
+                            int rri = r.Next(50, 110);
+                            DateTime timestamp = new DateTime(2017, 10, 14, h, m, s);
+                            list_RRI.Add(new RRI(user_idx, rri, timestamp));
+                        }
+                    }
+                }
+            }
+
+            {
+                int idx = 1;
+                string email = "elleinuo0@gmail.com";
+                string password = "qwer1234";
+                string name = "Handong Kim";
+                int gender = 1;
+                double weight = 69.7;
+                double height = 173.4;
+                DateTime signup_time = new DateTime(2017, 10, 14);
+                list_USER.Add(new USER(idx, email, password, name, gender, height, weight, signup_time));
+            }
+        }
     }
 }
