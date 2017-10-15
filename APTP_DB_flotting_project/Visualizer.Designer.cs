@@ -113,9 +113,9 @@
             this.ncc_acc.AutoRefresh = false;
             this.ncc_acc.BackColor = System.Drawing.SystemColors.Control;
             this.ncc_acc.InputKeys = new System.Windows.Forms.Keys[0];
-            this.ncc_acc.Location = new System.Drawing.Point(822, 23);
+            this.ncc_acc.Location = new System.Drawing.Point(622, 20);
             this.ncc_acc.Name = "ncc_acc";
-            this.ncc_acc.Size = new System.Drawing.Size(750, 550);
+            this.ncc_acc.Size = new System.Drawing.Size(550, 400);
             this.ncc_acc.State = ((Nevron.Chart.WinForm.NState)(resources.GetObject("ncc_acc.State")));
             this.ncc_acc.TabIndex = 9;
             this.ncc_acc.Text = "nChartControl1";
@@ -125,9 +125,9 @@
             this.ncc_bpm.AutoRefresh = false;
             this.ncc_bpm.BackColor = System.Drawing.SystemColors.Control;
             this.ncc_bpm.InputKeys = new System.Windows.Forms.Keys[0];
-            this.ncc_bpm.Location = new System.Drawing.Point(18, 598);
+            this.ncc_bpm.Location = new System.Drawing.Point(18, 448);
             this.ncc_bpm.Name = "ncc_bpm";
-            this.ncc_bpm.Size = new System.Drawing.Size(750, 550);
+            this.ncc_bpm.Size = new System.Drawing.Size(550, 400);
             this.ncc_bpm.State = ((Nevron.Chart.WinForm.NState)(resources.GetObject("ncc_bpm.State")));
             this.ncc_bpm.TabIndex = 10;
             this.ncc_bpm.Text = "nChartControl1";
@@ -137,9 +137,9 @@
             this.ncc_rri.AutoRefresh = false;
             this.ncc_rri.BackColor = System.Drawing.SystemColors.Control;
             this.ncc_rri.InputKeys = new System.Windows.Forms.Keys[0];
-            this.ncc_rri.Location = new System.Drawing.Point(822, 598);
+            this.ncc_rri.Location = new System.Drawing.Point(622, 448);
             this.ncc_rri.Name = "ncc_rri";
-            this.ncc_rri.Size = new System.Drawing.Size(750, 550);
+            this.ncc_rri.Size = new System.Drawing.Size(550, 400);
             this.ncc_rri.State = ((Nevron.Chart.WinForm.NState)(resources.GetObject("ncc_rri.State")));
             this.ncc_rri.TabIndex = 11;
             this.ncc_rri.Text = "nChartControl4";
@@ -177,7 +177,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(822, 5);
+            this.label2.Location = new System.Drawing.Point(620, 5);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(31, 12);
             this.label2.TabIndex = 13;
@@ -186,7 +186,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(822, 583);
+            this.label3.Location = new System.Drawing.Point(620, 433);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(24, 12);
             this.label3.TabIndex = 13;
@@ -195,7 +195,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(16, 583);
+            this.label4.Location = new System.Drawing.Point(16, 433);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(32, 12);
             this.label4.TabIndex = 13;
@@ -210,7 +210,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1584, 1161);
+            this.ClientSize = new System.Drawing.Size(1184, 861);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);

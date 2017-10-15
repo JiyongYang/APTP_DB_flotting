@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Nevron;
 using Nevron.Chart;
 using Nevron.Chart.WinForm;
+using Nevron.Chart.Windows;
 using Nevron.GraphicsCore;
 using Nevron.Dom;
 using Nevron.Editors;
@@ -22,6 +23,8 @@ namespace APTP_DB_flotting_project
         private mySqlLinkage msl;
         public double[][] acc_m_matrix;
         public double[][] acc_w_matrix;
+        public double[][] rri_m_matrix;
+        public double[][] rri_w_matrix;
         public Color[] m_ColorTable;
         public int day_flag;
         public Dictionary<string, string> day_stack;
@@ -44,7 +47,10 @@ namespace APTP_DB_flotting_project
                 m_ColorTable[i] = InterpolateColors(Color.Blue, Color.Red, i / 255.0f);
             }
             this.InitializeBarACC();
+            this.InitializeSurfaceRRI();
             this.SetUserInfoLabel();
+
+            StartTimer();
         }
 
         public static Color InterpolateColors(Color color1, Color color2, float factor)
@@ -120,6 +126,7 @@ namespace APTP_DB_flotting_project
         public void OnTimerTick(object sender, EventArgs e)
         {
             UpdateBarACC();
+            UpdateSurfaceRRI();
             SetTimerLabel();
             
             //second value add
@@ -137,9 +144,11 @@ namespace APTP_DB_flotting_project
                 }
 
                 LoadDayACCData();
+                LoadDayRRIData();
             }
 
             this.Refresh(ncc_acc);
+            this.Refresh(ncc_rri);
         }
 
         public void InitializeTime()
@@ -273,10 +282,8 @@ namespace APTP_DB_flotting_project
                 // turn off bar border to improve performance
                 bar.BorderStyle.Width = new NLength(0);
             }
-
-            StartTimer();
         }
-
+        
         public void UpdateBarACC()
         {
             // clear the list
@@ -375,6 +382,144 @@ namespace APTP_DB_flotting_project
             }
         }
 
+        public void InitializeSurfaceRRI()
+        {
+            ncc_rri.Settings.RenderSurface = RenderSurface.Window;
+            ncc_rri.Settings.ShapeRenderingMode = ShapeRenderingMode.None;
+            ncc_rri.Controller.Tools.Clear();
+            ncc_rri.Controller.Tools.Add(new NPanelSelectorTool());
+            ncc_rri.Controller.Tools.Add(new NTrackballTool());
+
+            // set a chart title
+            NLabel title = ncc_rri.Labels.AddHeader("Real Time Surface");
+            title.TextStyle.FontStyle = new NFontStyle("Times New Roman", 18, FontStyle.Italic);
+
+            // setup chart
+            NChart chart = ncc_rri.Charts[0];
+            chart.Enable3D = true;
+            chart.Width = 60.0f;
+            chart.Depth = 60.0f;
+            chart.Height = 30.0f;
+            chart.Projection.SetPredefinedProjection(PredefinedProjection.PerspectiveTilted);
+            chart.LightModel.SetPredefinedLightModel(PredefinedLightModel.MetallicLustre);
+
+            // setup axes
+            NOrdinalScaleConfigurator ordinalScale = (NOrdinalScaleConfigurator)chart.Axis(StandardAxis.PrimaryX).ScaleConfigurator;
+            ordinalScale.MajorGridStyle.SetShowAtWall(ChartWallType.Floor, true);
+            ordinalScale.MajorGridStyle.SetShowAtWall(ChartWallType.Back, true);
+            ordinalScale.DisplayDataPointsBetweenTicks = false;
+
+            ordinalScale = (NOrdinalScaleConfigurator)chart.Axis(StandardAxis.Depth).ScaleConfigurator;
+            ordinalScale.MajorGridStyle.SetShowAtWall(ChartWallType.Floor, true);
+            ordinalScale.MajorGridStyle.SetShowAtWall(ChartWallType.Left, true);
+            ordinalScale.DisplayDataPointsBetweenTicks = false;
+
+            // add the surface series
+            NGridSurfaceSeries surface = new NGridSurfaceSeries();
+            chart.Series.Add(surface);
+            surface.ShadingMode = ShadingMode.Smooth;
+            surface.FillMode = SurfaceFillMode.ZoneTexture;
+            surface.FrameMode = SurfaceFrameMode.None;
+            surface.SmoothPalette = true;
+            surface.CellTriangulationMode = SurfaceCellTriangulationMode.MaxSum;
+            surface.Data.SetGridSize(60, 10);
+
+            //// define a custom palette
+            //surface.Palette.Clear();
+            //surface.Palette.Add(-1, Color.DarkOrange);
+            //surface.Palette.Add(-0.5, Color.LightOrange);
+            //surface.Palette.Add(-0.25, Color.LightGreen);
+            //surface.Palette.Add(0, Color.Turquoise);
+            //surface.Palette.Add(0.25, Color.Blue);
+            //surface.Palette.Add(0.5, Color.Purple);
+            //surface.Palette.Add(1, Color.BeautifulRed);
+            
+            // apply layout
+            ConfigureStandardLayout(ncc_rri, chart, title, null);
+
+
+            //rri_w_matrix initialize, 3 section: x/y/z, 24*60*60: one day
+            rri_w_matrix = new double[10][];
+            for (int i = 0; i < 10; i++)
+            {
+                rri_w_matrix[i] = new double[24 * 60 * 60];
+            }
+
+            LoadDayRRIData();
+
+            rri_m_matrix = new double[10][];
+            for (int i = 0; i < 10; i++)
+            {
+                rri_m_matrix[i] = new double[60];
+            }
+        }
+
+        public void UpdateSurfaceRRI()
+        {
+            // clear the list
+            for (int i = 0; i < rri_m_matrix.Length; i++)
+            {
+                double[] arr = rri_m_matrix[i];
+                Array.Clear(arr, 0, arr.Length);
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 60; j++)
+                {
+                    rri_m_matrix[i][j] = 0;
+                }
+            }
+            for(int i=0;i<10;i++)
+            {
+                for (int j = 0; j < 60; j++)
+                {
+                    if (sec_flag + j < 24 * 60 * 60)
+                    {
+                        rri_m_matrix[i][j] = rri_w_matrix[i][sec_flag + j];
+                    }
+                }
+            }
+
+            NGridSurfaceSeries surface = (NGridSurfaceSeries)ncc_rri.Charts[0].Series[0];
+            
+
+            for(int i=0;i<10;i++)
+            {
+                for(int j=0;j< 60;j++)
+                {
+                    surface.Data.SetValue(j, i, rri_m_matrix[i][j]);
+                }
+            }
+        }
+
+        public void LoadDayRRIData()
+        {
+            Random r = new Random();
+            //set to 0
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 24 * 60 * 60; j++)
+                {
+                    rri_w_matrix[i][j] = 0;
+                }
+            }
+
+            //load acc whole data matrix according to changed day
+            for (int j = 0; j < msl.list_RRI.Count; j++)
+            {
+                string today = msl.list_RRI[j].timestamp.Year.ToString() + "/" + msl.list_RRI[j].timestamp.Month.ToString() + "/" + msl.list_RRI[j].timestamp.Day.ToString();
+                if (day_stack.ContainsKey(today) && day_stack[today] == day_flag.ToString())
+                {
+                    int k = msl.list_RRI[j].timestamp.Hour * 60 * 60 + msl.list_RRI[j].timestamp.Minute * 60 + msl.list_RRI[j].timestamp.Second;
+                    for(int i=0;i<10;i++)
+                    {
+                        rri_w_matrix[i][k] = msl.list_RRI[j].rri + r.Next(-10,10);
+                    }
+                }
+            }
+        }
+
         public void SetTimerLabel()
         {
             //time label setting
@@ -424,6 +569,5 @@ namespace APTP_DB_flotting_project
                 return false;
             }
         }
-    }
-    
+    }    
 }

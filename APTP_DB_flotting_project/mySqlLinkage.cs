@@ -186,55 +186,68 @@ namespace APTP_DB_flotting_project
             Random r = new Random();
             // ACC data
             {
-                for (int h = 0; h < 24; h++)
+                for(int d = 11;d<14;d++)
                 {
-                    for (int m = 0; m < 60; m++)
+                    for (int h = 0; h < 24; h++)
                     {
-                        for (int s = 0; s < 60; s++)
+                        for (int m = 0; m < 60; m++)
                         {
-                            int user_idx = 1;
-                            double x = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
-                            double y = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
-                            double z = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
-                            DateTime timestamp = new DateTime(2017, 10, r.Next() %4 + 10, h, m, s);
-                            list_ACC.Add(new ACC(user_idx, x, y, z, timestamp));
+                            for (int s = 0; s < 60; s++)
+                            {
+                                int user_idx = 1;
+                                double x = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
+                                double y = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
+                                double z = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
+                                DateTime timestamp = new DateTime(2017, 10, d, h, m, s);
+                                list_ACC.Add(new ACC(user_idx, x, y, z, timestamp));
+                            }
                         }
                     }
+
                 }
             }
 
+            //BPM data
             {
-                for (int h = 0; h < 24; h++)
+                for (int d = 11; d < 14; d++)
                 {
-                    for (int m = 0; m < 60; m++)
+                    for (int h = 0; h < 24; h++)
                     {
-                        for (int s = 0; s < 60; s++)
+                        for (int m = 0; m < 60; m++)
                         {
-                            int user_idx = 1;
-                            int bpm = r.Next(50, 110);
-                            DateTime timestamp = new DateTime(2017, 10, 14, h, m, s);
-                            list_BPM.Add(new BPM(user_idx, bpm, timestamp));
+                            for (int s = 0; s < 60; s++)
+                            {
+                                int user_idx = 1;
+                                int bpm = r.Next(50, 110);
+                                DateTime timestamp = new DateTime(2017, 10, d, h, m, s);
+                                list_BPM.Add(new BPM(user_idx, bpm, timestamp));
+                            }
                         }
                     }
-                }
+                }                    
             }
 
+            //RRI data
             {
-                for (int h = 0; h < 24; h++)
+                for (int d = 11; d < 14; d++)
                 {
-                    for (int m = 0; m < 60; m++)
+                    for (int h = 0; h < 24; h++)
                     {
-                        for (int s = 0; s < 60; s++)
+                        for (int m = 0; m < 60; m++)
                         {
-                            int user_idx = 1;
-                            int rri = r.Next(50, 110);
-                            DateTime timestamp = new DateTime(2017, 10, 14, h, m, s);
-                            list_RRI.Add(new RRI(user_idx, rri, timestamp));
+                            for (int s = 0; s < 60; s++)
+                            {
+                                int user_idx = 1;
+                                int rri = r.Next(50, 110);
+                                DateTime timestamp = new DateTime(2017, 10, d, h, m, s);
+                                list_RRI.Add(new RRI(user_idx, rri, timestamp));
+                            }
                         }
                     }
-                }
+                }                    
             }
 
+            //User info data
             {
                 int idx = 1;
                 string email = "elleinuo0@gmail.com";
