@@ -78,7 +78,7 @@ namespace APTP_DB_flotting_project
         }
     }
 
-    class mySqlLinkage
+    public class mySqlLinkage
     {
         public List<ACC> list_ACC = new List<ACC>();
         public List<BPM> list_BPM = new List<BPM>();
@@ -196,7 +196,7 @@ namespace APTP_DB_flotting_project
                             double x = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
                             double y = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
                             double z = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
-                            DateTime timestamp = new DateTime(2017, 10, 14, h, m, s);
+                            DateTime timestamp = new DateTime(2017, 10, r.Next() %4 + 10, h, m, s);
                             list_ACC.Add(new ACC(user_idx, x, y, z, timestamp));
                         }
                     }

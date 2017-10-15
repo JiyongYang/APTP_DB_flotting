@@ -20,13 +20,12 @@ namespace APTP_DB_flotting_project
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Visualizer form = new Visualizer();
-            RealTimeLineChart form = new RealTimeLineChart(_mySqlLinkage.list_BPM);
+            Visualizer form = new Visualizer(_mySqlLinkage);
+            //RealTimeLineChart form = new RealTimeLineChart(_mySqlLinkage.list_BPM);
             Application.Run(form);
         }
 
         //mysql로부터 불러온 데이터를 추가하는 루틴
-        //form.tabControl1.SelectedIndex => 0: acc, 1: bpm, 2: rri
 
     }
 }

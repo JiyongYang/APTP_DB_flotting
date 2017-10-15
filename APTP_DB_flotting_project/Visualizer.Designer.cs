@@ -28,352 +28,228 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Visualizer));
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tab_acc = new System.Windows.Forms.TabPage();
-            this.ncc_acc = new Nevron.Chart.WinForm.NChartControl();
-            this.label_acc = new System.Windows.Forms.Label();
-            this.tab_bpm = new System.Windows.Forms.TabPage();
-            this.ncc_bpm = new Nevron.Chart.WinForm.NChartControl();
-            this.label_bmi = new System.Windows.Forms.Label();
-            this.tab_rri = new System.Windows.Forms.TabPage();
-            this.ncc_rri = new Nevron.Chart.WinForm.NChartControl();
-            this.label_rri = new System.Windows.Forms.Label();
             this.label_id = new System.Windows.Forms.Label();
             this.label_name = new System.Windows.Forms.Label();
-            this.label_birth = new System.Windows.Forms.Label();
+            this.label_email = new System.Windows.Forms.Label();
             this.label_gender = new System.Windows.Forms.Label();
             this.label_height = new System.Windows.Forms.Label();
             this.label_weight = new System.Windows.Forms.Label();
-            this.label_temp = new System.Windows.Forms.Label();
-            this.tabControl2 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.nChartControl1 = new Nevron.Chart.WinForm.NChartControl();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.nChartControl2 = new Nevron.Chart.WinForm.NChartControl();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.nChartControl3 = new Nevron.Chart.WinForm.NChartControl();
-            this.tabControl1.SuspendLayout();
-            this.tab_acc.SuspendLayout();
-            this.tab_bpm.SuspendLayout();
-            this.tab_rri.SuspendLayout();
-            this.tabControl2.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            this.tabPage3.SuspendLayout();
+            this.ncc_acc = new Nevron.Chart.WinForm.NChartControl();
+            this.ncc_bpm = new Nevron.Chart.WinForm.NChartControl();
+            this.ncc_rri = new Nevron.Chart.WinForm.NChartControl();
+            this.label_userinfo = new System.Windows.Forms.Label();
+            this.label_timeinfo = new System.Windows.Forms.Label();
+            this.label_time = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
-            // tabControl1
+            // label_id
             // 
-            this.tabControl1.Controls.Add(this.tab_acc);
-            this.tabControl1.Controls.Add(this.tab_bpm);
-            this.tabControl1.Controls.Add(this.tab_rri);
-            this.tabControl1.Location = new System.Drawing.Point(10, 50);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1160, 700);
-            this.tabControl1.TabIndex = 1;
-            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            this.label_id.AutoSize = true;
+            this.label_id.Font = new System.Drawing.Font("굴림", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_id.Location = new System.Drawing.Point(41, 80);
+            this.label_id.Name = "label_id";
+            this.label_id.Size = new System.Drawing.Size(31, 16);
+            this.label_id.TabIndex = 2;
+            this.label_id.Text = "ID: ";
             // 
-            // tab_acc
+            // label_name
             // 
-            this.tab_acc.Controls.Add(this.tabControl2);
-            this.tab_acc.Controls.Add(this.ncc_acc);
-            this.tab_acc.Controls.Add(this.label_acc);
-            this.tab_acc.Location = new System.Drawing.Point(4, 22);
-            this.tab_acc.Name = "tab_acc";
-            this.tab_acc.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_acc.Size = new System.Drawing.Size(1152, 674);
-            this.tab_acc.TabIndex = 0;
-            this.tab_acc.Text = "ACC";
-            this.tab_acc.UseVisualStyleBackColor = true;
+            this.label_name.AutoSize = true;
+            this.label_name.Font = new System.Drawing.Font("굴림", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_name.Location = new System.Drawing.Point(41, 118);
+            this.label_name.Name = "label_name";
+            this.label_name.Size = new System.Drawing.Size(60, 16);
+            this.label_name.TabIndex = 3;
+            this.label_name.Text = "Name: ";
+            // 
+            // label_email
+            // 
+            this.label_email.AutoSize = true;
+            this.label_email.Font = new System.Drawing.Font("굴림", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_email.Location = new System.Drawing.Point(41, 160);
+            this.label_email.Name = "label_email";
+            this.label_email.Size = new System.Drawing.Size(64, 16);
+            this.label_email.TabIndex = 4;
+            this.label_email.Text = "E-mail: ";
+            // 
+            // label_gender
+            // 
+            this.label_gender.AutoSize = true;
+            this.label_gender.Font = new System.Drawing.Font("굴림", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_gender.Location = new System.Drawing.Point(368, 80);
+            this.label_gender.Name = "label_gender";
+            this.label_gender.Size = new System.Drawing.Size(70, 16);
+            this.label_gender.TabIndex = 5;
+            this.label_gender.Text = "Gender: ";
+            // 
+            // label_height
+            // 
+            this.label_height.AutoSize = true;
+            this.label_height.Font = new System.Drawing.Font("굴림", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_height.Location = new System.Drawing.Point(368, 118);
+            this.label_height.Name = "label_height";
+            this.label_height.Size = new System.Drawing.Size(63, 16);
+            this.label_height.TabIndex = 6;
+            this.label_height.Text = "Height: ";
+            // 
+            // label_weight
+            // 
+            this.label_weight.AutoSize = true;
+            this.label_weight.Font = new System.Drawing.Font("굴림", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_weight.Location = new System.Drawing.Point(368, 160);
+            this.label_weight.Name = "label_weight";
+            this.label_weight.Size = new System.Drawing.Size(67, 16);
+            this.label_weight.TabIndex = 7;
+            this.label_weight.Text = "Weight: ";
             // 
             // ncc_acc
             // 
             this.ncc_acc.AutoRefresh = false;
             this.ncc_acc.BackColor = System.Drawing.SystemColors.Control;
             this.ncc_acc.InputKeys = new System.Windows.Forms.Keys[0];
-            this.ncc_acc.Location = new System.Drawing.Point(126, 37);
+            this.ncc_acc.Location = new System.Drawing.Point(822, 23);
             this.ncc_acc.Name = "ncc_acc";
-            this.ncc_acc.Size = new System.Drawing.Size(900, 600);
+            this.ncc_acc.Size = new System.Drawing.Size(750, 550);
             this.ncc_acc.State = ((Nevron.Chart.WinForm.NState)(resources.GetObject("ncc_acc.State")));
-            this.ncc_acc.TabIndex = 10;
+            this.ncc_acc.TabIndex = 9;
             this.ncc_acc.Text = "nChartControl1";
-            // 
-            // label_acc
-            // 
-            this.label_acc.AutoSize = true;
-            this.label_acc.Location = new System.Drawing.Point(15, 15);
-            this.label_acc.Name = "label_acc";
-            this.label_acc.Size = new System.Drawing.Size(225, 12);
-            this.label_acc.TabIndex = 9;
-            this.label_acc.Text = "ACC: values of accelerometer sensors";
-            // 
-            // tab_bpm
-            // 
-            this.tab_bpm.Controls.Add(this.ncc_bpm);
-            this.tab_bpm.Controls.Add(this.label_bmi);
-            this.tab_bpm.Location = new System.Drawing.Point(4, 22);
-            this.tab_bpm.Name = "tab_bpm";
-            this.tab_bpm.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_bpm.Size = new System.Drawing.Size(1152, 674);
-            this.tab_bpm.TabIndex = 1;
-            this.tab_bpm.Text = "BPM";
-            this.tab_bpm.UseVisualStyleBackColor = true;
             // 
             // ncc_bpm
             // 
             this.ncc_bpm.AutoRefresh = false;
             this.ncc_bpm.BackColor = System.Drawing.SystemColors.Control;
             this.ncc_bpm.InputKeys = new System.Windows.Forms.Keys[0];
-            this.ncc_bpm.Location = new System.Drawing.Point(126, 37);
+            this.ncc_bpm.Location = new System.Drawing.Point(18, 598);
             this.ncc_bpm.Name = "ncc_bpm";
-            this.ncc_bpm.Size = new System.Drawing.Size(900, 600);
+            this.ncc_bpm.Size = new System.Drawing.Size(750, 550);
             this.ncc_bpm.State = ((Nevron.Chart.WinForm.NState)(resources.GetObject("ncc_bpm.State")));
             this.ncc_bpm.TabIndex = 10;
-            this.ncc_bpm.Text = "nChartControl2";
-            // 
-            // label_bmi
-            // 
-            this.label_bmi.AutoSize = true;
-            this.label_bmi.Location = new System.Drawing.Point(15, 15);
-            this.label_bmi.Name = "label_bmi";
-            this.label_bmi.Size = new System.Drawing.Size(144, 12);
-            this.label_bmi.TabIndex = 9;
-            this.label_bmi.Text = "BPM: Beats Per Minutes";
-            // 
-            // tab_rri
-            // 
-            this.tab_rri.Controls.Add(this.ncc_rri);
-            this.tab_rri.Controls.Add(this.label_rri);
-            this.tab_rri.Location = new System.Drawing.Point(4, 22);
-            this.tab_rri.Name = "tab_rri";
-            this.tab_rri.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_rri.Size = new System.Drawing.Size(1152, 674);
-            this.tab_rri.TabIndex = 2;
-            this.tab_rri.Text = "RRI";
-            this.tab_rri.UseVisualStyleBackColor = true;
+            this.ncc_bpm.Text = "nChartControl1";
             // 
             // ncc_rri
             // 
             this.ncc_rri.AutoRefresh = false;
             this.ncc_rri.BackColor = System.Drawing.SystemColors.Control;
             this.ncc_rri.InputKeys = new System.Windows.Forms.Keys[0];
-            this.ncc_rri.Location = new System.Drawing.Point(126, 37);
+            this.ncc_rri.Location = new System.Drawing.Point(822, 598);
             this.ncc_rri.Name = "ncc_rri";
-            this.ncc_rri.Size = new System.Drawing.Size(900, 600);
+            this.ncc_rri.Size = new System.Drawing.Size(750, 550);
             this.ncc_rri.State = ((Nevron.Chart.WinForm.NState)(resources.GetObject("ncc_rri.State")));
-            this.ncc_rri.TabIndex = 10;
-            this.ncc_rri.Text = "nChartControl3";
+            this.ncc_rri.TabIndex = 11;
+            this.ncc_rri.Text = "nChartControl4";
             // 
-            // label_rri
+            // label_userinfo
             // 
-            this.label_rri.AutoSize = true;
-            this.label_rri.Location = new System.Drawing.Point(15, 15);
-            this.label_rri.Name = "label_rri";
-            this.label_rri.Size = new System.Drawing.Size(98, 12);
-            this.label_rri.TabIndex = 9;
-            this.label_rri.Text = "RRI: R-R interval";
+            this.label_userinfo.AutoSize = true;
+            this.label_userinfo.Font = new System.Drawing.Font("굴림", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_userinfo.Location = new System.Drawing.Point(41, 42);
+            this.label_userinfo.Name = "label_userinfo";
+            this.label_userinfo.Size = new System.Drawing.Size(83, 16);
+            this.label_userinfo.TabIndex = 12;
+            this.label_userinfo.Text = "User Info";
             // 
-            // label_id
+            // label_timeinfo
             // 
-            this.label_id.AutoSize = true;
-            this.label_id.Location = new System.Drawing.Point(15, 20);
-            this.label_id.Name = "label_id";
-            this.label_id.Size = new System.Drawing.Size(16, 12);
-            this.label_id.TabIndex = 2;
-            this.label_id.Text = "ID";
+            this.label_timeinfo.AutoSize = true;
+            this.label_timeinfo.Font = new System.Drawing.Font("굴림", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_timeinfo.Location = new System.Drawing.Point(41, 225);
+            this.label_timeinfo.Name = "label_timeinfo";
+            this.label_timeinfo.Size = new System.Drawing.Size(83, 16);
+            this.label_timeinfo.TabIndex = 12;
+            this.label_timeinfo.Text = "Time Info";
             // 
-            // label_name
+            // label_time
             // 
-            this.label_name.AutoSize = true;
-            this.label_name.Location = new System.Drawing.Point(165, 20);
-            this.label_name.Name = "label_name";
-            this.label_name.Size = new System.Drawing.Size(39, 12);
-            this.label_name.TabIndex = 3;
-            this.label_name.Text = "Name";
+            this.label_time.AutoSize = true;
+            this.label_time.Font = new System.Drawing.Font("굴림", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_time.Location = new System.Drawing.Point(41, 261);
+            this.label_time.Name = "label_time";
+            this.label_time.Size = new System.Drawing.Size(40, 16);
+            this.label_time.TabIndex = 4;
+            this.label_time.Text = "----";
             // 
-            // label_birth
+            // label2
             // 
-            this.label_birth.AutoSize = true;
-            this.label_birth.Location = new System.Drawing.Point(315, 20);
-            this.label_birth.Name = "label_birth";
-            this.label_birth.Size = new System.Drawing.Size(30, 12);
-            this.label_birth.TabIndex = 4;
-            this.label_birth.Text = "Birth";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(822, 5);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(31, 12);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "ACC";
             // 
-            // label_gender
+            // label3
             // 
-            this.label_gender.AutoSize = true;
-            this.label_gender.Location = new System.Drawing.Point(465, 20);
-            this.label_gender.Name = "label_gender";
-            this.label_gender.Size = new System.Drawing.Size(46, 12);
-            this.label_gender.TabIndex = 5;
-            this.label_gender.Text = "Gender";
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(822, 583);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(24, 12);
+            this.label3.TabIndex = 13;
+            this.label3.Text = "RRI";
             // 
-            // label_height
+            // label4
             // 
-            this.label_height.AutoSize = true;
-            this.label_height.Location = new System.Drawing.Point(615, 20);
-            this.label_height.Name = "label_height";
-            this.label_height.Size = new System.Drawing.Size(40, 12);
-            this.label_height.TabIndex = 6;
-            this.label_height.Text = "Height";
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(16, 583);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(32, 12);
+            this.label4.TabIndex = 13;
+            this.label4.Text = "BPM";
             // 
-            // label_weight
+            // timer1
             // 
-            this.label_weight.AutoSize = true;
-            this.label_weight.Location = new System.Drawing.Point(765, 20);
-            this.label_weight.Name = "label_weight";
-            this.label_weight.Size = new System.Drawing.Size(42, 12);
-            this.label_weight.TabIndex = 7;
-            this.label_weight.Text = "Weight";
-            // 
-            // label_temp
-            // 
-            this.label_temp.AutoSize = true;
-            this.label_temp.Location = new System.Drawing.Point(921, 20);
-            this.label_temp.Name = "label_temp";
-            this.label_temp.Size = new System.Drawing.Size(25, 12);
-            this.label_temp.TabIndex = 8;
-            this.label_temp.Text = "text";
-            // 
-            // tabControl2
-            // 
-            this.tabControl2.Controls.Add(this.tabPage1);
-            this.tabControl2.Controls.Add(this.tabPage2);
-            this.tabControl2.Controls.Add(this.tabPage3);
-            this.tabControl2.Location = new System.Drawing.Point(17, 37);
-            this.tabControl2.Name = "tabControl2";
-            this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(1129, 622);
-            this.tabControl2.TabIndex = 11;
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.nChartControl1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1121, 627);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Line";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // nChartControl1
-            // 
-            this.nChartControl1.AutoRefresh = false;
-            this.nChartControl1.BackColor = System.Drawing.SystemColors.Control;
-            this.nChartControl1.InputKeys = new System.Windows.Forms.Keys[0];
-            this.nChartControl1.Location = new System.Drawing.Point(126, 37);
-            this.nChartControl1.Name = "nChartControl1";
-            this.nChartControl1.Size = new System.Drawing.Size(888, 563);
-            this.nChartControl1.State = ((Nevron.Chart.WinForm.NState)(resources.GetObject("nChartControl1.State")));
-            this.nChartControl1.TabIndex = 10;
-            this.nChartControl1.Text = "nChartControl1";
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.nChartControl2);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1121, 627);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Stick";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // nChartControl2
-            // 
-            this.nChartControl2.AutoRefresh = false;
-            this.nChartControl2.BackColor = System.Drawing.SystemColors.Control;
-            this.nChartControl2.InputKeys = new System.Windows.Forms.Keys[0];
-            this.nChartControl2.Location = new System.Drawing.Point(126, 37);
-            this.nChartControl2.Name = "nChartControl2";
-            this.nChartControl2.Size = new System.Drawing.Size(900, 600);
-            this.nChartControl2.State = ((Nevron.Chart.WinForm.NState)(resources.GetObject("nChartControl2.State")));
-            this.nChartControl2.TabIndex = 10;
-            this.nChartControl2.Text = "nChartControl2";
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.Controls.Add(this.nChartControl3);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1121, 596);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Pie";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            // 
-            // nChartControl3
-            // 
-            this.nChartControl3.AutoRefresh = false;
-            this.nChartControl3.BackColor = System.Drawing.SystemColors.Control;
-            this.nChartControl3.InputKeys = new System.Windows.Forms.Keys[0];
-            this.nChartControl3.Location = new System.Drawing.Point(126, 37);
-            this.nChartControl3.Name = "nChartControl3";
-            this.nChartControl3.Size = new System.Drawing.Size(900, 541);
-            this.nChartControl3.State = ((Nevron.Chart.WinForm.NState)(resources.GetObject("nChartControl3.State")));
-            this.nChartControl3.TabIndex = 10;
-            this.nChartControl3.Text = "nChartControl3";
+            this.timer1.Interval = 10;
+            this.timer1.Tick += new System.EventHandler(this.OnTimerTick);
             // 
             // Visualizer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1184, 761);
-            this.Controls.Add(this.label_temp);
+            this.ClientSize = new System.Drawing.Size(1584, 1161);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label_timeinfo);
+            this.Controls.Add(this.label_userinfo);
+            this.Controls.Add(this.ncc_rri);
+            this.Controls.Add(this.ncc_bpm);
+            this.Controls.Add(this.ncc_acc);
             this.Controls.Add(this.label_weight);
             this.Controls.Add(this.label_height);
             this.Controls.Add(this.label_gender);
-            this.Controls.Add(this.label_birth);
+            this.Controls.Add(this.label_time);
+            this.Controls.Add(this.label_email);
             this.Controls.Add(this.label_name);
             this.Controls.Add(this.label_id);
-            this.Controls.Add(this.tabControl1);
             this.Name = "Visualizer";
             this.Text = "Visualizer";
-            this.tabControl1.ResumeLayout(false);
-            this.tab_acc.ResumeLayout(false);
-            this.tab_acc.PerformLayout();
-            this.tab_bpm.ResumeLayout(false);
-            this.tab_bpm.PerformLayout();
-            this.tab_rri.ResumeLayout(false);
-            this.tab_rri.PerformLayout();
-            this.tabControl2.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        public System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tab_bpm;
-        private System.Windows.Forms.TabPage tab_acc;
         private System.Windows.Forms.Label label_id;
         protected internal System.Windows.Forms.Label label_name;
-        private System.Windows.Forms.Label label_birth;
+        private System.Windows.Forms.Label label_email;
         private System.Windows.Forms.Label label_gender;
         private System.Windows.Forms.Label label_height;
         private System.Windows.Forms.Label label_weight;
-        protected internal System.Windows.Forms.Label label_bmi;
-        protected internal System.Windows.Forms.Label label_acc;
-        private System.Windows.Forms.TabPage tab_rri;
-        protected internal System.Windows.Forms.Label label_rri;
-        private Nevron.Chart.WinForm.NChartControl ncc_acc;
-        private Nevron.Chart.WinForm.NChartControl ncc_bpm;
-        private Nevron.Chart.WinForm.NChartControl ncc_rri;
-        private System.Windows.Forms.Label label_temp;
-        public System.Windows.Forms.TabControl tabControl2;
-        private System.Windows.Forms.TabPage tabPage1;
-        private Nevron.Chart.WinForm.NChartControl nChartControl1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private Nevron.Chart.WinForm.NChartControl nChartControl2;
-        private System.Windows.Forms.TabPage tabPage3;
-        private Nevron.Chart.WinForm.NChartControl nChartControl3;
+        public Nevron.Chart.WinForm.NChartControl ncc_acc;
+        public Nevron.Chart.WinForm.NChartControl ncc_bpm;
+        public Nevron.Chart.WinForm.NChartControl ncc_rri;
+        private System.Windows.Forms.Label label_userinfo;
+        private System.Windows.Forms.Label label_timeinfo;
+        private System.Windows.Forms.Label label_time;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 
