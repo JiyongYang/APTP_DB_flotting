@@ -25,6 +25,13 @@ namespace APTP_DB_flotting_project
         public double[][] acc_w_matrix;
         public double[][] rri_m_matrix;
         public double[][] rri_w_matrix;
+        NLineSeries m_BPMLine;
+
+        int[] m_BPMValueArray;
+        int[] m_BPMValue_m;
+
+        int m_MaxCount = 60;
+        int m_NewDataPointsPerTick = 60;
         public Color[] m_ColorTable;
         public int day_flag;
         public Dictionary<string, string> day_stack;
@@ -47,6 +54,7 @@ namespace APTP_DB_flotting_project
                 m_ColorTable[i] = InterpolateColors(Color.Blue, Color.Red, i / 255.0f);
             }
             this.InitializeBarACC();
+            this.InitializeBPMGraph();
             this.InitializeSurfaceRRI();
             this.SetUserInfoLabel();
 
@@ -126,6 +134,7 @@ namespace APTP_DB_flotting_project
         public void OnTimerTick(object sender, EventArgs e)
         {
             UpdateBarACC();
+            UpdateLineBPM();
             UpdateSurfaceRRI();
             SetTimerLabel();
             
@@ -144,11 +153,13 @@ namespace APTP_DB_flotting_project
                 }
 
                 LoadDayACCData();
+                LoadDayBPMData();
                 LoadDayRRIData();
             }
 
             this.Refresh(ncc_acc);
             this.Refresh(ncc_rri);
+            this.Refresh(ncc_bpm);
         }
 
         public void InitializeTime()
@@ -516,6 +527,115 @@ namespace APTP_DB_flotting_project
                     {
                         rri_w_matrix[i][k] = msl.list_RRI[j].rri + r.Next(-10,10);
                     }
+                }
+            }
+        }
+
+        // for BPM
+        private void ConfigureAxis(NAxis axis, float beginPercent, float endPercent, string title)
+        {
+            NLinearScaleConfigurator scale = new NLinearScaleConfigurator();
+            scale.MajorGridStyle.SetShowAtWall(ChartWallType.Back, true);
+            axis.ScaleConfigurator = scale;
+            axis.View = new NRangeAxisView(new NRange1DD(50, 110), true, true);
+            axis.ScaleConfigurator.Title.Text = title;
+            axis.Anchor = new NDockAxisAnchor(AxisDockZone.FrontLeft, false);
+            axis.Anchor.BeginPercent = beginPercent;
+            axis.Anchor.EndPercent = endPercent;
+            axis.Visible = true;
+        }
+
+        private NLineSeries CreateLineSeries()
+        {
+            NLineSeries lineSeries = new NLineSeries();
+
+            lineSeries.Values.Capacity = m_MaxCount;
+            lineSeries.XValues.Capacity = m_MaxCount;
+            lineSeries.DataLabelStyle.Visible = false;
+            lineSeries.SamplingMode = SeriesSamplingMode.Enabled;
+            lineSeries.SampleDistance = new NLength(1, NGraphicsUnit.Pixel);
+
+            return lineSeries;
+        }
+
+        private void InitializeBPMGraph()
+        {
+            ncc_bpm.Clear();
+            ncc_bpm.Legends.Clear();
+
+            m_BPMValueArray = new int[24 * 60 * 60];
+            LoadDayBPMData();
+            m_BPMValue_m = new int[60];
+
+            // Set a chart title
+            NLabel title = ncc_bpm.Labels.AddHeader("BPM Line chart");
+            title.TextStyle.FontStyle = new NFontStyle("Times New Roman", 18, FontStyle.Italic);
+            title.ContentAlignment = ContentAlignment.BottomCenter;
+            title.Location = new NPointL(new NLength(50, NRelativeUnit.ParentPercentage), new NLength(2, NRelativeUnit.ParentPercentage));
+
+            // Setup Chart
+            NCartesianChart chart = new NCartesianChart();
+            ncc_bpm.Panels.Add(chart);
+            chart.BoundsMode = BoundsMode.Stretch;
+
+            NAxis axis1 = chart.Axis(StandardAxis.PrimaryY);
+            ConfigureAxis(axis1, 0, 100, "Time");
+
+            m_BPMLine = CreateLineSeries();
+            chart.Series.Add(m_BPMLine);
+
+
+            //m_BPMValueArray = new double[m_NewDataPointsPerTick];
+
+            ConfigureStandardLayout(ncc_bpm, chart, title, null);
+
+            ncc_bpm.Settings.RenderSurface = RenderSurface.Window;
+        }
+
+        public void UpdateLineBPM()
+        {
+            int newDataPoints = m_NewDataPointsPerTick;
+
+            // clear the list
+            for (int i = 0; i < m_BPMValue_m.Length; i++)
+            {
+                m_BPMValue_m[i] = 0;
+            }
+
+            for (int j = 0; j < 60; j++)
+            {
+                if (sec_flag + j < 24 * 60 * 60)
+                {
+                    m_BPMValue_m[j] = m_BPMValueArray[sec_flag + j];
+                }
+            }
+
+            if (m_BPMLine.Values.Count == 0)
+            {
+                m_BPMLine.Values.AddRange(m_BPMValue_m);
+            }
+            else
+            {
+                m_BPMLine.Values.SetRange(0, m_BPMValue_m);
+            }
+        }
+
+        public void LoadDayBPMData()
+        {
+            for (int j = 0; j < 24 * 60 * 60; j++)
+            {
+                m_BPMValueArray[j] = 0;
+            }
+
+            //load bpm whole data matrix according to changed day
+            for (int j = 0; j < msl.list_BPM.Count; j++)
+            {
+                string today = msl.list_BPM[j].timestamp.Year.ToString() + "/" + msl.list_BPM[j].timestamp.Month.ToString() + "/" + msl.list_BPM[j].timestamp.Day.ToString();
+                if (day_stack.ContainsKey(today) && day_stack[today] == day_flag.ToString())
+                {
+                    int k = msl.list_BPM[j].timestamp.Hour * 60 * 60 + msl.list_BPM[j].timestamp.Minute * 60 + msl.list_BPM[j].timestamp.Second;
+
+                    m_BPMValueArray[k] = msl.list_BPM[j].bpm;
                 }
             }
         }
