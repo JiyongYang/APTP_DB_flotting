@@ -103,7 +103,7 @@ namespace APTP_DB_flotting_project
                     double z = rdr_ACC.GetDouble(rdr_ACC.GetOrdinal("z"));
                     DateTime timestamp = rdr_ACC.GetDateTime(rdr_ACC.GetOrdinal("timestamp"));
                     int k = timestamp.Hour * 60 * 60 + timestamp.Minute * 60 + timestamp.Second;
-                    int d = timestamp.Day - 11;
+                    int d = timestamp.Day - 9;
                     list_ACC[d * 24 * 60 * 60 + k] = new ACC(user_idx, x, y, z, timestamp);
                 }
                 rdr_ACC.Close();
@@ -117,7 +117,7 @@ namespace APTP_DB_flotting_project
                     int bpm = rdr_BPM.GetInt32(rdr_BPM.GetOrdinal("bpm"));
                     DateTime timestamp = rdr_BPM.GetDateTime(rdr_BPM.GetOrdinal("timestamp"));
                     int k = timestamp.Hour * 60 * 60 + timestamp.Minute * 60 + timestamp.Second;
-                    int d = timestamp.Day - 11;
+                    int d = timestamp.Day - 9;
                     list_BPM[d * 24 * 60 * 60 + k] = new BPM(user_idx, bpm, timestamp);
                 }
                 rdr_BPM.Close();
@@ -131,7 +131,7 @@ namespace APTP_DB_flotting_project
                     int rri = rdr_RRI.GetInt32(rdr_RRI.GetOrdinal("rri"));
                     DateTime timestamp = rdr_RRI.GetDateTime(rdr_RRI.GetOrdinal("timestamp"));
                     int k = timestamp.Hour * 60 * 60 + timestamp.Minute * 60 + timestamp.Second;
-                    int d = timestamp.Day - 11;
+                    int d = timestamp.Day - 9;
                     list_RRI[d * 24 * 60 * 60 + k] = new RRI(user_idx, rri, timestamp);
                 }
                 rdr_RRI.Close();
@@ -146,8 +146,8 @@ namespace APTP_DB_flotting_project
                     string password = rdr_USER.GetString(rdr_USER.GetOrdinal("password"));
                     string name = rdr_USER.GetString(rdr_USER.GetOrdinal("name"));
                     int gender = rdr_USER.GetInt32(rdr_USER.GetOrdinal("gender"));
-                    double weight = rdr_ACC.GetDouble(rdr_ACC.GetOrdinal("height"));
-                    double height = rdr_ACC.GetDouble(rdr_ACC.GetOrdinal("weight"));
+                    double weight = rdr_USER.GetDouble(rdr_USER.GetOrdinal("height"));
+                    double height = rdr_USER.GetDouble(rdr_USER.GetOrdinal("weight"));
                     DateTime signup_time = rdr_USER.GetDateTime(rdr_USER.GetOrdinal("signup_time"));
                     list_USER.Add(new USER(idx, email, password, name, gender, height, weight, signup_time));
                 }
@@ -161,7 +161,7 @@ namespace APTP_DB_flotting_project
             Random r = new Random();
             // ACC data
             {
-                for(int d = 11;d<14;d++)
+                for(int d = 9;d<14;d++)
                 {
                     for (int h = 0; h < 24; h++)
                     {
@@ -184,7 +184,7 @@ namespace APTP_DB_flotting_project
 
             //BPM data
             {
-                for (int d = 11; d < 14; d++)
+                for (int d = 9; d < 14; d++)
                 {
                     for (int h = 0; h < 24; h++)
                     {
@@ -204,7 +204,7 @@ namespace APTP_DB_flotting_project
 
             //RRI data
             {
-                for (int d = 11; d < 14; d++)
+                for (int d = 9; d < 14; d++)
                 {
                     for (int h = 0; h < 24; h++)
                     {

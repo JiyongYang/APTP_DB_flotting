@@ -46,6 +46,15 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.button_start = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.button_pause = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.listBox_acc_log = new System.Windows.Forms.ListBox();
+            this.listBox_bpm_log = new System.Windows.Forms.ListBox();
+            this.listBox_rri_log = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // label_id
@@ -113,9 +122,9 @@
             this.ncc_acc.AutoRefresh = false;
             this.ncc_acc.BackColor = System.Drawing.SystemColors.Control;
             this.ncc_acc.InputKeys = new System.Windows.Forms.Keys[0];
-            this.ncc_acc.Location = new System.Drawing.Point(622, 20);
+            this.ncc_acc.Location = new System.Drawing.Point(622, 24);
             this.ncc_acc.Name = "ncc_acc";
-            this.ncc_acc.Size = new System.Drawing.Size(550, 400);
+            this.ncc_acc.Size = new System.Drawing.Size(550, 480);
             this.ncc_acc.State = ((Nevron.Chart.WinForm.NState)(resources.GetObject("ncc_acc.State")));
             this.ncc_acc.TabIndex = 9;
             this.ncc_acc.Text = "nChartControl1";
@@ -125,9 +134,9 @@
             this.ncc_bpm.AutoRefresh = false;
             this.ncc_bpm.BackColor = System.Drawing.SystemColors.Control;
             this.ncc_bpm.InputKeys = new System.Windows.Forms.Keys[0];
-            this.ncc_bpm.Location = new System.Drawing.Point(18, 448);
+            this.ncc_bpm.Location = new System.Drawing.Point(18, 549);
             this.ncc_bpm.Name = "ncc_bpm";
-            this.ncc_bpm.Size = new System.Drawing.Size(550, 400);
+            this.ncc_bpm.Size = new System.Drawing.Size(550, 480);
             this.ncc_bpm.State = ((Nevron.Chart.WinForm.NState)(resources.GetObject("ncc_bpm.State")));
             this.ncc_bpm.TabIndex = 10;
             this.ncc_bpm.Text = "nChartControl1";
@@ -137,9 +146,9 @@
             this.ncc_rri.AutoRefresh = false;
             this.ncc_rri.BackColor = System.Drawing.SystemColors.Control;
             this.ncc_rri.InputKeys = new System.Windows.Forms.Keys[0];
-            this.ncc_rri.Location = new System.Drawing.Point(622, 448);
+            this.ncc_rri.Location = new System.Drawing.Point(622, 549);
             this.ncc_rri.Name = "ncc_rri";
-            this.ncc_rri.Size = new System.Drawing.Size(550, 400);
+            this.ncc_rri.Size = new System.Drawing.Size(550, 480);
             this.ncc_rri.State = ((Nevron.Chart.WinForm.NState)(resources.GetObject("ncc_rri.State")));
             this.ncc_rri.TabIndex = 11;
             this.ncc_rri.Text = "nChartControl4";
@@ -167,17 +176,17 @@
             // label_time
             // 
             this.label_time.AutoSize = true;
-            this.label_time.Font = new System.Drawing.Font("굴림", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_time.Font = new System.Drawing.Font("굴림", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label_time.Location = new System.Drawing.Point(41, 261);
             this.label_time.Name = "label_time";
-            this.label_time.Size = new System.Drawing.Size(40, 16);
+            this.label_time.Size = new System.Drawing.Size(45, 19);
             this.label_time.TabIndex = 4;
             this.label_time.Text = "----";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(620, 5);
+            this.label2.Location = new System.Drawing.Point(620, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(31, 12);
             this.label2.TabIndex = 13;
@@ -186,7 +195,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(620, 433);
+            this.label3.Location = new System.Drawing.Point(620, 534);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(24, 12);
             this.label3.TabIndex = 13;
@@ -195,7 +204,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(16, 433);
+            this.label4.Location = new System.Drawing.Point(16, 534);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(32, 12);
             this.label4.TabIndex = 13;
@@ -203,14 +212,107 @@
             // 
             // timer1
             // 
-            this.timer1.Interval = 10;
+            this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.OnTimerTick);
+            // 
+            // button_start
+            // 
+            this.button_start.Location = new System.Drawing.Point(44, 401);
+            this.button_start.Name = "button_start";
+            this.button_start.Size = new System.Drawing.Size(96, 41);
+            this.button_start.TabIndex = 14;
+            this.button_start.Text = "Start";
+            this.button_start.UseVisualStyleBackColor = true;
+            this.button_start.Click += new System.EventHandler(this.button_start_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("굴림", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label1.Location = new System.Drawing.Point(42, 355);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(78, 16);
+            this.label1.TabIndex = 15;
+            this.label1.Text = "Controls";
+            // 
+            // button_pause
+            // 
+            this.button_pause.Location = new System.Drawing.Point(178, 401);
+            this.button_pause.Name = "button_pause";
+            this.button_pause.Size = new System.Drawing.Size(96, 41);
+            this.button_pause.TabIndex = 14;
+            this.button_pause.Text = "Pause";
+            this.button_pause.UseVisualStyleBackColor = true;
+            this.button_pause.Click += new System.EventHandler(this.button_pause_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(1207, 9);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(56, 12);
+            this.label5.TabIndex = 17;
+            this.label5.Text = "ACC Log";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(1207, 359);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(57, 12);
+            this.label6.TabIndex = 18;
+            this.label6.Text = "BPM Log";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(1205, 722);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(49, 12);
+            this.label7.TabIndex = 19;
+            this.label7.Text = "RRI Log";
+            // 
+            // listBox_acc_log
+            // 
+            this.listBox_acc_log.FormattingEnabled = true;
+            this.listBox_acc_log.ItemHeight = 12;
+            this.listBox_acc_log.Location = new System.Drawing.Point(1209, 24);
+            this.listBox_acc_log.Name = "listBox_acc_log";
+            this.listBox_acc_log.Size = new System.Drawing.Size(660, 292);
+            this.listBox_acc_log.TabIndex = 20;
+            // 
+            // listBox_bpm_log
+            // 
+            this.listBox_bpm_log.FormattingEnabled = true;
+            this.listBox_bpm_log.ItemHeight = 12;
+            this.listBox_bpm_log.Location = new System.Drawing.Point(1209, 374);
+            this.listBox_bpm_log.Name = "listBox_bpm_log";
+            this.listBox_bpm_log.Size = new System.Drawing.Size(660, 292);
+            this.listBox_bpm_log.TabIndex = 20;
+            // 
+            // listBox_rri_log
+            // 
+            this.listBox_rri_log.FormattingEnabled = true;
+            this.listBox_rri_log.ItemHeight = 12;
+            this.listBox_rri_log.Location = new System.Drawing.Point(1207, 737);
+            this.listBox_rri_log.Name = "listBox_rri_log";
+            this.listBox_rri_log.Size = new System.Drawing.Size(660, 292);
+            this.listBox_rri_log.TabIndex = 20;
             // 
             // Visualizer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1184, 861);
+            this.ClientSize = new System.Drawing.Size(1904, 1041);
+            this.Controls.Add(this.listBox_rri_log);
+            this.Controls.Add(this.listBox_bpm_log);
+            this.Controls.Add(this.listBox_acc_log);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.button_pause);
+            this.Controls.Add(this.button_start);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -250,6 +352,15 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Button button_start;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button_pause;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ListBox listBox_acc_log;
+        private System.Windows.Forms.ListBox listBox_bpm_log;
+        private System.Windows.Forms.ListBox listBox_rri_log;
     }
 }
 

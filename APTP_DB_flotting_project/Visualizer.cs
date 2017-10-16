@@ -27,8 +27,8 @@ namespace APTP_DB_flotting_project
         public double[][] rri_w_matrix;
         NLineSeries m_BPMLine;
 
-        int[] m_BPMValueArray;
-        int[] m_BPMValue_m;
+        int[] bpm_w_matrix;
+        int[] bpm_m_matrix;
 
         int m_MaxCount = 60;
         int m_NewDataPointsPerTick = 60;
@@ -44,6 +44,10 @@ namespace APTP_DB_flotting_project
 
         public Visualizer(mySqlLinkage _msl)
         {
+            NLicense license = new NLicense("0619cf66-9900-d103-7d02-2d6f5900b739");
+            NLicenseManager.Instance.SetLicense(license);
+            NLicenseManager.Instance.LockLicense = true;
+
             InitializeComponent();
 
             msl = _msl;
@@ -57,8 +61,6 @@ namespace APTP_DB_flotting_project
             this.InitializeBPMGraph();
             this.InitializeSurfaceRRI();
             this.SetUserInfoLabel();
-
-            StartTimer();
         }
 
         public static Color InterpolateColors(Color color1, Color color2, float factor)
@@ -125,10 +127,15 @@ namespace APTP_DB_flotting_project
                     new NLength(11, NRelativeUnit.ParentPercentage));
             }
         }
-        
+
         public void StartTimer()
         {
             this.timer1.Enabled = true;
+        }
+
+        public void PauseTimer()
+        {
+            this.timer1.Enabled = false;
         }
 
         public void OnTimerTick(object sender, EventArgs e)
@@ -137,6 +144,7 @@ namespace APTP_DB_flotting_project
             UpdateLineBPM();
             UpdateSurfaceRRI();
             SetTimerLabel();
+            SetLogTextBoxes();
             
             //second value add
             sec_flag++;
@@ -191,7 +199,7 @@ namespace APTP_DB_flotting_project
         public void InitializeBarACC()
         {
             // set a chart title
-            NLabel title = ncc_acc.Labels.AddHeader("Real Time Bar - ACC");
+            NLabel title = ncc_acc.Labels.AddHeader("ACC Bar chart");
             title.TextStyle.FontStyle = new NFontStyle("Times New Roman", 18, FontStyle.Italic);
             title.ContentAlignment = ContentAlignment.BottomCenter;
             title.Location = new NPointL(new NLength(50, NRelativeUnit.ParentPercentage), new NLength(2, NRelativeUnit.ParentPercentage));
@@ -402,7 +410,7 @@ namespace APTP_DB_flotting_project
             ncc_rri.Controller.Tools.Add(new NTrackballTool());
 
             // set a chart title
-            NLabel title = ncc_rri.Labels.AddHeader("Real Time Surface");
+            NLabel title = ncc_rri.Labels.AddHeader("RRI Surface chart");
             title.TextStyle.FontStyle = new NFontStyle("Times New Roman", 18, FontStyle.Italic);
 
             // setup chart
@@ -563,9 +571,9 @@ namespace APTP_DB_flotting_project
             ncc_bpm.Clear();
             ncc_bpm.Legends.Clear();
 
-            m_BPMValueArray = new int[24 * 60 * 60];
+            bpm_w_matrix = new int[24 * 60 * 60];
             LoadDayBPMData();
-            m_BPMValue_m = new int[60];
+            bpm_m_matrix = new int[60];
 
             // Set a chart title
             NLabel title = ncc_bpm.Labels.AddHeader("BPM Line chart");
@@ -585,7 +593,7 @@ namespace APTP_DB_flotting_project
             chart.Series.Add(m_BPMLine);
 
 
-            //m_BPMValueArray = new double[m_NewDataPointsPerTick];
+            //bpm_w_matrix = new double[m_NewDataPointsPerTick];
 
             ConfigureStandardLayout(ncc_bpm, chart, title, null);
 
@@ -597,26 +605,26 @@ namespace APTP_DB_flotting_project
             int newDataPoints = m_NewDataPointsPerTick;
 
             // clear the list
-            for (int i = 0; i < m_BPMValue_m.Length; i++)
+            for (int i = 0; i < bpm_m_matrix.Length; i++)
             {
-                m_BPMValue_m[i] = 0;
+                bpm_m_matrix[i] = 0;
             }
 
             for (int j = 0; j < 60; j++)
             {
                 if (sec_flag + j < 24 * 60 * 60)
                 {
-                    m_BPMValue_m[j] = m_BPMValueArray[sec_flag + j];
+                    bpm_m_matrix[j] = bpm_w_matrix[sec_flag + j];
                 }
             }
 
             if (m_BPMLine.Values.Count == 0)
             {
-                m_BPMLine.Values.AddRange(m_BPMValue_m);
+                m_BPMLine.Values.AddRange(bpm_m_matrix);
             }
             else
             {
-                m_BPMLine.Values.SetRange(0, m_BPMValue_m);
+                m_BPMLine.Values.SetRange(0, bpm_m_matrix);
             }
         }
 
@@ -624,7 +632,7 @@ namespace APTP_DB_flotting_project
         {
             for (int j = 0; j < 24 * 60 * 60; j++)
             {
-                m_BPMValueArray[j] = 0;
+                bpm_w_matrix[j] = 0;
             }
 
             //load bpm whole data matrix according to changed day
@@ -635,7 +643,7 @@ namespace APTP_DB_flotting_project
                 {
                     int k = msl.list_BPM[j].timestamp.Hour * 60 * 60 + msl.list_BPM[j].timestamp.Minute * 60 + msl.list_BPM[j].timestamp.Second;
 
-                    m_BPMValueArray[k] = msl.list_BPM[j].bpm;
+                    bpm_w_matrix[k] = msl.list_BPM[j].bpm;
                 }
             }
         }
@@ -664,6 +672,88 @@ namespace APTP_DB_flotting_project
             }
         }
 
+        public void SetLogTextBoxes()
+        {
+            //add 60 text to box
+            if(sec_flag == 0)
+            {
+                string date;
+                int s_hour, s_min, s_sec;
+                if (!day_stack.ContainsValue(day_flag.ToString()))
+                {
+                    //error
+                }
+                date = day_stack.FirstOrDefault(x => x.Value == day_flag.ToString()).Key;
+                s_hour = sec_flag / (60 * 60);
+                s_min = (sec_flag - s_hour * 60 * 60) / 60;
+                s_sec = sec_flag % 60;
+
+                //acc log
+                for (int i = day_flag * 24 * 60 * 60; i < (day_flag * 24 * 60 * 60) + 60; i++)
+                {
+                    s_sec = i - (day_flag * 24 * 60 * 60);
+                    date = day_stack.FirstOrDefault(x => x.Value == day_flag.ToString()).Key + " " + s_hour.ToString("D2") + ":" + s_min.ToString("D2") + ":" + s_sec.ToString("D2");
+                    //textBox_aac_log.Text += date + "\r\nacc_x: " + acc_w_matrix[0][i] + "\r\nacc_y: " + acc_w_matrix[1][i] + "\r\nacc_z: " + acc_w_matrix[2][i] + "\r\n";
+                    listBox_acc_log.Items.Add(date + "  acc_x: " + acc_w_matrix[0][i] + "\tacc_y: " + acc_w_matrix[1][i] + "\tacc_z: " + acc_w_matrix[2][i]);
+                    this.listBox_acc_log.SelectedIndex = this.listBox_acc_log.Items.Count - 1;
+                }
+
+                //bpm log
+                for (int i = day_flag * 24 * 60 * 60; i < (day_flag * 24 * 60 * 60) + 60; i++)
+                {
+                    s_sec = i - (day_flag * 24 * 60 * 60);
+                    date = day_stack.FirstOrDefault(x => x.Value == day_flag.ToString()).Key + " " + s_hour.ToString("D2") + ":" + s_min.ToString("D2") + ":" + s_sec.ToString("D2");
+                    //textBox_bpm_log.Text += date + "\tbpm: " + bpm_w_matrix[i] + "\r\n";
+                    listBox_bpm_log.Items.Add(date + "  bpm: " + bpm_w_matrix[i]);
+                    this.listBox_bpm_log.SelectedIndex = this.listBox_bpm_log.Items.Count - 1;
+                }
+
+                //rri log
+                for (int i = day_flag * 24 * 60 * 60; i < (day_flag * 24 * 60 * 60) + 60; i++)
+                {
+                    s_sec = i - (day_flag * 24 * 60 * 60);
+                    date = day_stack.FirstOrDefault(x => x.Value == day_flag.ToString()).Key + " " + s_hour.ToString("D2") + ":" + s_min.ToString("D2") + ":" + s_sec.ToString("D2");
+                    //textBox_rri_log.Text += date + "\trri: " + rri_w_matrix[0][i] + "\r\n";
+                    listBox_rri_log.Items.Add(date + "  rri: " + rri_w_matrix[0][i]);
+                    this.listBox_rri_log.SelectedIndex = this.listBox_rri_log.Items.Count - 1;
+                }
+            }
+            else
+            {
+                string date;
+                int s_hour, s_min, s_sec;
+                if (!day_stack.ContainsValue(day_flag.ToString()))
+                {
+                    //error
+                }
+                
+                if (sec_flag + 59 <= 24 * 60 * 60)
+                {
+                    date = day_stack.FirstOrDefault(x => x.Value == day_flag.ToString()).Key;
+                    s_hour = (sec_flag+59) / (60 * 60);
+                    s_min = ((sec_flag + 59) - s_hour * 60 * 60) / 60;
+                    s_sec = (sec_flag + 59) % 60;
+
+                    date = day_stack.FirstOrDefault(x => x.Value == day_flag.ToString()).Key + " " + s_hour.ToString("D2") + ":" + s_min.ToString("D2") + ":" + s_sec.ToString("D2");
+                    //acc log
+                    //textBox_aac_log.Text += date + "\r\nacc_x: " + acc_w_matrix[0][day_flag*24*60*60 + sec_flag + 59] + "\r\nacc_y: " + acc_w_matrix[1][day_flag * 24 * 60 * 60 + sec_flag + 59] 
+                    //    + "\r\nacc_z: " + acc_w_matrix[2][day_flag * 24 * 60 * 60 + sec_flag + 59] + "\r\n";
+                    listBox_acc_log.Items.Add(date + "  acc_x: " + acc_w_matrix[0][day_flag * 24 * 60 * 60 + sec_flag + 59] + "\tacc_y: " + acc_w_matrix[1][day_flag * 24 * 60 * 60 + sec_flag + 59] + "\tacc_z: " + acc_w_matrix[2][day_flag * 24 * 60 * 60 + sec_flag + 59]);
+                    this.listBox_acc_log.SelectedIndex = this.listBox_acc_log.Items.Count - 1;
+
+                    //bpm log
+                    //textBox_bpm_log.Text += date + "\tbpm: " + bpm_w_matrix[day_flag * 24 * 60 * 60 + sec_flag + 59] + "\r\n";
+                    listBox_bpm_log.Items.Add(date + "  bpm: " + bpm_w_matrix[day_flag * 24 * 60 * 60 + sec_flag + 59]);
+                    this.listBox_bpm_log.SelectedIndex = this.listBox_bpm_log.Items.Count - 1;
+
+                    //rri log
+                    //textBox_rri_log.Text += date + "\trri: " + rri_w_matrix[0][day_flag * 24 * 60 * 60 + sec_flag + 59] + "\r\n";
+                    listBox_rri_log.Items.Add(date + "  rri: " + rri_w_matrix[0][day_flag * 24 * 60 * 60 + sec_flag + 59]);
+                    this.listBox_rri_log.SelectedIndex = this.listBox_rri_log.Items.Count - 1;
+                }
+            }
+        }
+
         public void SetUserInfoLabel()
         {
             label_id.Text = "ID: " + msl.list_USER[0].idx.ToString();
@@ -689,5 +779,15 @@ namespace APTP_DB_flotting_project
                 return false;
             }
         }
-    }    
+
+        private void button_start_Click(object sender, EventArgs e)
+        {
+            StartTimer();
+        }
+
+        private void button_pause_Click(object sender, EventArgs e)
+        {
+            PauseTimer();
+        }
+    }
 }

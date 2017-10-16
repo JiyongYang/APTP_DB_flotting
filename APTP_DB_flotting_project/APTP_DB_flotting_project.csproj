@@ -99,12 +99,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RealTimeLineChart.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="RealTimeLineChart.Designer.cs">
-      <DependentUpon>RealTimeLineChart.cs</DependentUpon>
-    </Compile>
     <Compile Include="Visualizer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -124,9 +118,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="RealTimeLineChart.resx">
-      <DependentUpon>RealTimeLineChart.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Visualizer.resx">
       <DependentUpon>Visualizer.cs</DependentUpon>
     </EmbeddedResource>
