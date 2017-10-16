@@ -152,8 +152,90 @@ namespace APTP_DB_flotting_project
                     list_USER.Add(new USER(idx, email, password, name, gender, height, weight, signup_time));
                 }
                 rdr_USER.Close();
-                
+
             }
+        }
+        
+        public void Realtime_SelectUsingReader()
+        {
+            string strConn = "Server=localhost;Database=aptp;Uid=aptp;Pwd=aptp1000;";
+
+            using (MySqlConnection conn = new MySqlConnection(strConn))
+            {
+                list_ACC.Clear();
+                list_BPM.Clear();
+                list_RRI.Clear();
+
+                conn.Open();
+                string sql_ACC = "SELECT * FROM ACC LIMIT 10 OFFSET N-10";
+                MySqlCommand cmd_ACC = new MySqlCommand(sql_ACC, conn);
+                MySqlDataReader rdr_ACC = cmd_ACC.ExecuteReader();
+                while (rdr_ACC.Read())
+                {
+                    int user_idx = rdr_ACC.GetInt32(rdr_ACC.GetOrdinal("user_idx"));
+                    double x = rdr_ACC.GetDouble(rdr_ACC.GetOrdinal("x"));
+                    double y = rdr_ACC.GetDouble(rdr_ACC.GetOrdinal("y"));
+                    double z = rdr_ACC.GetDouble(rdr_ACC.GetOrdinal("z"));
+                    DateTime timestamp = rdr_ACC.GetDateTime(rdr_ACC.GetOrdinal("timestamp"));
+                    
+                    list_ACC.Add(new ACC(user_idx, x, y, z, timestamp));
+                }
+                rdr_ACC.Close();
+
+                string sql_BPM = "SELECT * FROM BPM LIMIT 10 OFFSET N-10";
+                MySqlCommand cmd_BPM = new MySqlCommand(sql_BPM, conn);
+                MySqlDataReader rdr_BPM = cmd_BPM.ExecuteReader();
+                while (rdr_BPM.Read())
+                {
+                    int user_idx = rdr_BPM.GetInt32(rdr_BPM.GetOrdinal("user_idx"));
+                    int bpm = rdr_BPM.GetInt32(rdr_BPM.GetOrdinal("bpm"));
+                    DateTime timestamp = rdr_BPM.GetDateTime(rdr_BPM.GetOrdinal("timestamp"));
+
+                    list_BPM.Add(new BPM(user_idx, bpm, timestamp));
+                }
+                rdr_BPM.Close();
+
+                string sql_RRI = "SELECT * FROM RRI LIMIT 10 OFFSET N-10";
+                MySqlCommand cmd_RRI = new MySqlCommand(sql_RRI, conn);
+                MySqlDataReader rdr_RRI = cmd_RRI.ExecuteReader();
+                while (rdr_RRI.Read())
+                {
+                    int user_idx = rdr_RRI.GetInt32(rdr_RRI.GetOrdinal("user_idx"));
+                    int rri = rdr_RRI.GetInt32(rdr_RRI.GetOrdinal("rri"));
+                    DateTime timestamp = rdr_RRI.GetDateTime(rdr_RRI.GetOrdinal("timestamp"));
+
+                    list_RRI.Add(new RRI(user_idx, rri, timestamp));
+                }
+                rdr_RRI.Close();
+            }
+        }
+
+        public void Realtime_SelectUserInfoUsingReader()
+        {
+            string strConn = "Server=localhost;Database=aptp;Uid=aptp;Pwd=aptp1000;";
+
+            using (MySqlConnection conn = new MySqlConnection(strConn))
+            {
+                conn.Open();
+
+                string sql_USER = "SELECT * FROM USER";
+                MySqlCommand cmd_USER = new MySqlCommand(sql_USER, conn);
+                MySqlDataReader rdr_USER = cmd_USER.ExecuteReader();
+                while (rdr_USER.Read())
+                {
+                    int idx = rdr_USER.GetInt32(rdr_USER.GetOrdinal("idx"));
+                    string email = rdr_USER.GetString(rdr_USER.GetOrdinal("email"));
+                    string password = rdr_USER.GetString(rdr_USER.GetOrdinal("password"));
+                    string name = rdr_USER.GetString(rdr_USER.GetOrdinal("name"));
+                    int gender = rdr_USER.GetInt32(rdr_USER.GetOrdinal("gender"));
+                    double weight = rdr_USER.GetDouble(rdr_USER.GetOrdinal("height"));
+                    double height = rdr_USER.GetDouble(rdr_USER.GetOrdinal("weight"));
+                    DateTime signup_time = rdr_USER.GetDateTime(rdr_USER.GetOrdinal("signup_time"));
+                    list_USER.Add(new USER(idx, email, password, name, gender, height, weight, signup_time));
+                }
+                rdr_USER.Close();
+            }
+
         }
 
         public void FakeDataGenerator()

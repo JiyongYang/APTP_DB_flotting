@@ -16,7 +16,7 @@ namespace APTP_DB_flotting_project
         static void Main()
         {
             mySqlLinkage _mySqlLinkage = new mySqlLinkage();
-            _mySqlLinkage.FakeDataGenerator();
+            //_mySqlLinkage.FakeDataGenerator();
             //_mySqlLinkage.SelectUsingReader();
 
             Application.EnableVisualStyles();

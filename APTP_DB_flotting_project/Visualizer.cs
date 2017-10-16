@@ -25,22 +25,49 @@ namespace APTP_DB_flotting_project
         public double[][] acc_w_matrix;
         public double[][] rri_m_matrix;
         public double[][] rri_w_matrix;
-        NLineSeries m_BPMLine;
-
         int[] bpm_w_matrix;
         int[] bpm_m_matrix;
 
+        NLineSeries m_BPMLine;
         int m_MaxCount = 60;
         int m_NewDataPointsPerTick = 60;
         public Color[] m_ColorTable;
         public int day_flag;
         public Dictionary<string, string> day_stack;
+        public Dictionary<string, bool> dic_lb_acc;
+        public Dictionary<string, bool> dic_lb_bpm;
+        public Dictionary<string, bool> dic_lb_rri;
         public int sec_flag;
+        public string date_format;
 
         public Visualizer()
         {
             InitializeComponent();
         }
+
+        //for all data
+        //public Visualizer(mySqlLinkage _msl)
+        //{
+        //    NLicense license = new NLicense("0619cf66-9900-d103-7d02-2d6f5900b739");
+        //    NLicenseManager.Instance.SetLicense(license);
+        //    NLicenseManager.Instance.LockLicense = true;
+
+        //    InitializeComponent();
+
+        //    msl = _msl;
+        //    InitializeTime();
+        //    m_ColorTable = new Color[256];
+        //    for (int i = 0; i <= 255; i++)
+        //    {
+        //        m_ColorTable[i] = InterpolateColors(Color.Blue, Color.Red, i / 255.0f);
+        //    }
+        //    this.InitializeBarACC();
+        //    this.InitializeBPMGraph();
+        //    this.InitializeSurfaceRRI();
+        //    this.SetUserInfoLabel();
+        //}
+
+        //for realtime
 
         public Visualizer(mySqlLinkage _msl)
         {
@@ -49,17 +76,17 @@ namespace APTP_DB_flotting_project
             NLicenseManager.Instance.LockLicense = true;
 
             InitializeComponent();
-
+            dic_lb_acc = new Dictionary<string, bool>();
+            dic_lb_bpm = new Dictionary<string, bool>();
+            dic_lb_rri = new Dictionary<string, bool>();
+            date_format = "yyyyMMdd HH:mm";
             msl = _msl;
-            InitializeTime();
             m_ColorTable = new Color[256];
             for (int i = 0; i <= 255; i++)
             {
                 m_ColorTable[i] = InterpolateColors(Color.Blue, Color.Red, i / 255.0f);
             }
-            this.InitializeBarACC();
-            this.InitializeBPMGraph();
-            this.InitializeSurfaceRRI();
+            this.msl.Realtime_SelectUserInfoUsingReader();
             this.SetUserInfoLabel();
         }
 
@@ -140,34 +167,7 @@ namespace APTP_DB_flotting_project
 
         public void OnTimerTick(object sender, EventArgs e)
         {
-            UpdateBarACC();
-            UpdateLineBPM();
-            UpdateSurfaceRRI();
-            SetTimerLabel();
-            SetLogTextBoxes();
-            
-            //second value add
-            sec_flag++;
-            if (sec_flag == 24*60*60)
-            {
-                //day over
-                sec_flag = 0;
 
-                //day flag value setting
-                day_flag++;
-                if (day_flag == day_stack.Count)
-                {
-                    day_flag = 0;
-                }
-
-                LoadDayACCData();
-                LoadDayBPMData();
-                LoadDayRRIData();
-            }
-
-            this.Refresh(ncc_acc);
-            this.Refresh(ncc_rri);
-            this.Refresh(ncc_bpm);
         }
 
         public void InitializeTime()
@@ -445,16 +445,6 @@ namespace APTP_DB_flotting_project
             surface.SmoothPalette = true;
             surface.CellTriangulationMode = SurfaceCellTriangulationMode.MaxSum;
             surface.Data.SetGridSize(60, 10);
-
-            //// define a custom palette
-            //surface.Palette.Clear();
-            //surface.Palette.Add(-1, Color.DarkOrange);
-            //surface.Palette.Add(-0.5, Color.LightOrange);
-            //surface.Palette.Add(-0.25, Color.LightGreen);
-            //surface.Palette.Add(0, Color.Turquoise);
-            //surface.Palette.Add(0.25, Color.Blue);
-            //surface.Palette.Add(0.5, Color.Purple);
-            //surface.Palette.Add(1, Color.BeautifulRed);
             
             // apply layout
             ConfigureStandardLayout(ncc_rri, chart, title, null);
@@ -755,6 +745,352 @@ namespace APTP_DB_flotting_project
                     this.listBox_rri_log.SelectedIndex = this.listBox_rri_log.Items.Count - 1;
                 }
             }
+        }
+
+        public void Realtime_OnTimerTick(object sender, EventArgs e)
+        {
+            this.msl.Realtime_SelectUsingReader();
+
+            Realtime_UpdateBarACC();
+            Realtime_UpdateLineBPM();
+            Realtime_UpdateSurfaceRRI();
+
+            Realtime_SetTimerLabel();
+            Realtime_SetLogTextBoxes();
+
+            this.Refresh(ncc_acc);
+            this.Refresh(ncc_rri);
+            this.Refresh(ncc_bpm);
+        }
+
+        public void Realtime_InitializeBarACC()
+        {
+            ncc_acc.Controller.Tools.Clear();
+            ncc_acc.Controller.Tools.Add(new NPanelSelectorTool());
+            ncc_acc.Controller.Tools.Add(new NTrackballTool());
+            // set a chart title
+            NLabel title = ncc_acc.Labels.AddHeader("ACC Bar chart");
+            title.TextStyle.FontStyle = new NFontStyle("Times New Roman", 18, FontStyle.Italic);
+            title.ContentAlignment = ContentAlignment.BottomCenter;
+            title.Location = new NPointL(new NLength(50, NRelativeUnit.ParentPercentage), new NLength(2, NRelativeUnit.ParentPercentage));
+
+            // no legend
+            ncc_acc.Legends.Clear();
+
+            // do not update automatic legends
+            ncc_acc.ServiceManager.LegendUpdateService.UpdateAutoLegends();
+            ncc_acc.ServiceManager.LegendUpdateService.Stop();
+
+            // configure the chart
+            NCartesianChart chart = (NCartesianChart)ncc_acc.Charts[0];
+            chart.Projection.SetPredefinedProjection(PredefinedProjection.PerspectiveTilted);
+            chart.BoundsMode = BoundsMode.Fit;
+            chart.Enable3D = true;
+            chart.Fit3DAxisContent = false;
+
+            // make the aspect 6:1:2
+            chart.Width = 60;
+            chart.Height = 20;
+            chart.Depth = 20;
+
+            // configure the y axis
+            NAxis yAxis = chart.Axis(StandardAxis.PrimaryY);
+            //y축 범위 지정
+            yAxis.View = new NRangeAxisView(new NRange1DD(-2, 2));
+
+            NLinearScaleConfigurator linearScale = yAxis.ScaleConfigurator as NLinearScaleConfigurator;
+
+            // add interlace stripe
+            NScaleStripStyle stripStyle = new NScaleStripStyle(new NColorFillStyle(Color.Beige), null, true, 0, 0, 1, 1);
+            stripStyle.Interlaced = true;
+            stripStyle.SetShowAtWall(ChartWallType.Back, true);
+            stripStyle.SetShowAtWall(ChartWallType.Left, true);
+            linearScale.StripStyles.Add(stripStyle);
+
+            linearScale.MajorGridStyle.LineStyle.Color = Color.LightSteelBlue;
+            linearScale.InnerMinorTickStyle.Visible = false;
+            linearScale.InnerMajorTickStyle.Visible = false;
+            linearScale.LabelFitModes = new LabelFitMode[0];
+
+            // configure the x axis
+            NAxis xAxis = chart.Axis(StandardAxis.PrimaryX);
+            linearScale = new NLinearScaleConfigurator();
+            linearScale.LabelFitModes = new LabelFitMode[0];
+            xAxis.ScaleConfigurator = linearScale;
+            linearScale.RoundToTickMax = false;
+            linearScale.RoundToTickMin = false;
+            linearScale.InnerMinorTickStyle.Visible = false;
+            linearScale.InnerMajorTickStyle.Visible = false;
+
+            chart.Axis(StandardAxis.Depth).Visible = false;
+
+            // apply layout
+            ConfigureStandardLayout(ncc_acc, chart, title, null);
+
+            // apply style sheet
+            NStyleSheet styleSheet = NStyleSheet.CreatePredefinedStyleSheet(PredefinedStyleSheet.Fresh);
+            styleSheet.Apply(ncc_acc.Document);
+
+            NChartPalette palette = new NChartPalette(ChartPredefinedPalette.Fresh);
+
+            //bar initialize
+            for (int i = 0; i < 3; i++)
+            {
+                // add the first line
+                NBarSeries bar = new NBarSeries();
+                chart.Series.Add(bar);
+
+                bar.WidthPercent = 100.0f;
+                bar.DepthPercent = 100.0f;
+
+                bar.EnableDepthSort = false;
+                bar.DataLabelStyle.Visible = false;
+
+                bar.Values.ValueFormatter = new NNumericValueFormatter("0.0");
+                bar.Values.EmptyDataPoints.ValueMode = EmptyDataPointsValueMode.Skip;
+
+                bar.Values.Clear();
+                bar.FillStyles.StorageType = IndexedStorageType.Array;
+                bar.DataPointOriginIndex = 0;
+
+                // turn off bar border to improve performance
+                bar.BorderStyle.Width = new NLength(0);
+            }
+        }
+
+        public void Realtime_InitializeSurfaceRRI()
+        {
+            ncc_rri.Settings.RenderSurface = RenderSurface.Window;
+            ncc_rri.Settings.ShapeRenderingMode = ShapeRenderingMode.None;
+            ncc_rri.Controller.Tools.Clear();
+            ncc_rri.Controller.Tools.Add(new NPanelSelectorTool());
+            ncc_rri.Controller.Tools.Add(new NTrackballTool());
+
+            // set a chart title
+            NLabel title = ncc_rri.Labels.AddHeader("RRI Surface chart");
+            title.TextStyle.FontStyle = new NFontStyle("Times New Roman", 18, FontStyle.Italic);
+
+            // setup chart
+            NChart chart = ncc_rri.Charts[0];
+            chart.Enable3D = true;
+            chart.Width = 60.0f;
+            chart.Depth = 60.0f;
+            chart.Height = 30.0f;
+            chart.Projection.SetPredefinedProjection(PredefinedProjection.PerspectiveTilted);
+            chart.LightModel.SetPredefinedLightModel(PredefinedLightModel.MetallicLustre);
+
+            // setup axes
+            NOrdinalScaleConfigurator ordinalScale = (NOrdinalScaleConfigurator)chart.Axis(StandardAxis.PrimaryX).ScaleConfigurator;
+            ordinalScale.MajorGridStyle.SetShowAtWall(ChartWallType.Floor, true);
+            ordinalScale.MajorGridStyle.SetShowAtWall(ChartWallType.Back, true);
+            ordinalScale.DisplayDataPointsBetweenTicks = false;
+
+            ordinalScale = (NOrdinalScaleConfigurator)chart.Axis(StandardAxis.Depth).ScaleConfigurator;
+            ordinalScale.MajorGridStyle.SetShowAtWall(ChartWallType.Floor, true);
+            ordinalScale.MajorGridStyle.SetShowAtWall(ChartWallType.Left, true);
+            ordinalScale.DisplayDataPointsBetweenTicks = false;
+
+            // add the surface series
+            NGridSurfaceSeries surface = new NGridSurfaceSeries();
+            chart.Series.Add(surface);
+            surface.ShadingMode = ShadingMode.Smooth;
+            surface.FillMode = SurfaceFillMode.ZoneTexture;
+            surface.FrameMode = SurfaceFrameMode.None;
+            surface.SmoothPalette = true;
+            surface.CellTriangulationMode = SurfaceCellTriangulationMode.MaxSum;
+            surface.Data.SetGridSize(60, 10);
+
+            // apply layout
+            ConfigureStandardLayout(ncc_rri, chart, title, null);            
+        }
+
+        private void Realtime_InitializeBPMGraph()
+        {
+            ncc_bpm.Clear();
+            ncc_bpm.Legends.Clear();
+            
+            // Set a chart title
+            NLabel title = ncc_bpm.Labels.AddHeader("BPM Line chart");
+            title.TextStyle.FontStyle = new NFontStyle("Times New Roman", 18, FontStyle.Italic);
+            title.ContentAlignment = ContentAlignment.BottomCenter;
+            title.Location = new NPointL(new NLength(50, NRelativeUnit.ParentPercentage), new NLength(2, NRelativeUnit.ParentPercentage));
+
+            // Setup Chart
+            NCartesianChart chart = new NCartesianChart();
+            ncc_bpm.Panels.Add(chart);
+            chart.BoundsMode = BoundsMode.Stretch;
+
+            NAxis axis1 = chart.Axis(StandardAxis.PrimaryY);
+            ConfigureAxis(axis1, 0, 100, "Time");
+
+            m_BPMLine = CreateLineSeries();
+            chart.Series.Add(m_BPMLine);
+            
+            //bpm_w_matrix = new double[m_NewDataPointsPerTick];
+
+            ConfigureStandardLayout(ncc_bpm, chart, title, null);
+
+            ncc_bpm.Settings.RenderSurface = RenderSurface.Window;
+        }
+
+        public void Realtime_UpdateBarACC()
+        {
+            this.Realtime_InitializeBarACC();
+            double[][] data = new double[3][];
+            data[0] = new double[60];
+            data[1] = new double[60];
+            data[2] = new double[60];
+
+            for (int i=0;i<msl.list_ACC.Count;i++)
+            {
+                data[0][i] = msl.list_ACC[i].x;
+                data[1][i] = msl.list_ACC[i].y;
+                data[2][i] = msl.list_ACC[i].z;
+            }
+
+            // fill grid to bars
+            NChart chart = ncc_acc.Charts[0];
+            for (int i = 0; i < data.Length; i++)
+            {
+                NBarSeries bar = chart.Series[i] as NBarSeries;
+                double[] barValues = data[i];
+                int barValueCount = barValues.Length;
+
+                if (bar.Values.Count == 0)
+                {
+                    bar.Values.AddRange(barValues);
+                }
+                else
+                {
+                    bar.Values.SetRange(0, barValues);
+                }
+
+                int fillStyleCount = bar.FillStyles.Count;
+
+                for (int j = 0; j < barValueCount; j++)
+                {
+                    int color_var = 0;
+                    if (!barValues[j].Equals(0))
+                        color_var = (int)((barValues[j] + 2) * 60);
+
+                    if (j >= fillStyleCount)
+                    {
+                        //bar.FillStyles[j] = new NColorFillStyle(m_ColorTable[(int)barValues[j]]);
+                        if (color_var == 0)
+                            bar.FillStyles[j] = new NColorFillStyle(Color.FromArgb(0, 0, 0, 0));
+                        else
+                            bar.FillStyles[j] = new NColorFillStyle(m_ColorTable[color_var]);
+                    }
+                    else
+                    {
+                        //((NColorFillStyle)bar.FillStyles[j]).Color = m_ColorTable[(int)barValues[j]];
+                        if (color_var == 0)
+                            ((NColorFillStyle)bar.FillStyles[j]).Color = Color.FromArgb(0, 0, 0, 0);
+                        else
+                            ((NColorFillStyle)bar.FillStyles[j]).Color = m_ColorTable[color_var];
+                    }
+                }
+            }
+        }
+
+        public void Realtime_UpdateSurfaceRRI()
+        {
+            Random r = new Random();
+            this.Realtime_InitializeSurfaceRRI();
+
+            double[][] data = new double[10][];
+            for (int i = 0; i < 10; i++)
+                data[i] = new double[60];
+
+            for (int i = 0; i < msl.list_RRI.Count; i++)
+            {
+                data[0][i] = msl.list_RRI[i].rri;
+                for (int j = 1; j < 10; j++)
+                    data[j][i] = msl.list_RRI[i].rri + r.Next(-10, 10);
+            }
+
+            NGridSurfaceSeries surface = (NGridSurfaceSeries)ncc_rri.Charts[0].Series[0];
+            
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 60; j++)
+                {
+                    surface.Data.SetValue(j, i, data[i][j]);
+                }
+            }
+        }
+
+        public void Realtime_UpdateLineBPM()
+        {
+            this.Realtime_InitializeBPMGraph();
+
+            double[] data = new double[60];
+
+            for(int i=0;i<msl.list_BPM.Count;i++)
+            {
+                data[i] = msl.list_BPM[i].bpm;
+            }
+
+            if (m_BPMLine.Values.Count == 0)
+            {
+                m_BPMLine.Values.AddRange(data);
+            }
+            else
+            {
+                m_BPMLine.Values.SetRange(0, data);
+            }
+        }
+
+        public void Realtime_SetTimerLabel()
+        {
+            label_time.Text = msl.list_ACC[0].timestamp.ToString(date_format) + " ~ " + msl.list_ACC[msl.list_ACC.Count-1].timestamp.ToString(date_format);
+        }
+
+        public void Realtime_SetLogTextBoxes()
+        {
+            for (int i = 0; i < msl.list_ACC.Count; i++)
+            {
+                if (!dic_lb_acc.ContainsKey(msl.list_ACC[i].timestamp.ToString(date_format) + "  acc_x: " + msl.list_ACC[i].x + "\tacc_y: " + msl.list_ACC[i].y + "\tacc_z: " + msl.list_ACC[i].z))
+                    dic_lb_acc.Add(msl.list_ACC[i].timestamp.ToString(date_format) + "  acc_x: " + msl.list_ACC[i].x + "\tacc_y: " + msl.list_ACC[i].y + "\tacc_z: " + msl.list_ACC[i].z, false);
+            }
+            for (int i = 0; i < msl.list_BPM.Count; i++)
+            {
+                if (!dic_lb_bpm.ContainsKey(msl.list_BPM[i].timestamp.ToString(date_format) + "  bpm: " + msl.list_BPM[i].bpm))
+                    dic_lb_bpm.Add(msl.list_ACC[i].timestamp.ToString(date_format) + "  bpm: " + msl.list_BPM[i].bpm, false);
+            }
+            for (int i = 0; i < msl.list_RRI.Count; i++)
+            {
+                if (!dic_lb_rri.ContainsKey(msl.list_RRI[i].timestamp.ToString(date_format) + "  rri: " + msl.list_RRI[i].rri))
+                    dic_lb_rri.Add(msl.list_RRI[i].timestamp.ToString(date_format) + "  rri: " + msl.list_RRI[i].rri, false);
+            }
+
+            for (int i = 0; i < dic_lb_acc.Count; i++)
+            {
+                if (dic_lb_acc.Values.ElementAt(i) == false)
+                {
+                    listBox_acc_log.Items.Add(dic_lb_acc.Keys.ElementAt(i));
+                    listBox_acc_log.SelectedIndex = listBox_acc_log.Items.Count - 1;
+                    dic_lb_acc[dic_lb_acc.Keys.ElementAt(i)] = true;
+                }
+            }
+            for (int i = 0; i < dic_lb_bpm.Count; i++)
+            {
+                if (dic_lb_bpm.Values.ElementAt(i) == false)
+                {
+                    listBox_bpm_log.Items.Add(dic_lb_bpm.Keys.ElementAt(i));
+                    listBox_bpm_log.SelectedIndex = listBox_bpm_log.Items.Count - 1;
+                    dic_lb_bpm[dic_lb_bpm.Keys.ElementAt(i)] = true;
+                }
+            }
+            for (int i = 0; i < dic_lb_rri.Count; i++)
+            {
+                if (dic_lb_rri.Values.ElementAt(i) == false)
+                {
+                    listBox_rri_log.Items.Add(dic_lb_rri.Keys.ElementAt(i));
+                    listBox_rri_log.SelectedIndex = listBox_rri_log.Items.Count - 1;
+                    dic_lb_rri[dic_lb_rri.Keys.ElementAt(i)] = true;
+                }
+            }            
         }
 
         public void SetUserInfoLabel()
