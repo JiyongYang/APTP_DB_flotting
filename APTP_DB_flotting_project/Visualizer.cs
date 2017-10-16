@@ -198,6 +198,9 @@ namespace APTP_DB_flotting_project
 
         public void InitializeBarACC()
         {
+            ncc_acc.Controller.Tools.Clear();
+            ncc_acc.Controller.Tools.Add(new NPanelSelectorTool());
+            ncc_acc.Controller.Tools.Add(new NTrackballTool());
             // set a chart title
             NLabel title = ncc_acc.Labels.AddHeader("ACC Bar chart");
             title.TextStyle.FontStyle = new NFontStyle("Times New Roman", 18, FontStyle.Italic);
