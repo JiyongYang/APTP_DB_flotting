@@ -95,14 +95,16 @@ namespace APTP_DB_flotting_project
                 string sql_ACC = "SELECT * FROM ACC";
                 MySqlCommand cmd_ACC = new MySqlCommand(sql_ACC, conn);
                 MySqlDataReader rdr_ACC = cmd_ACC.ExecuteReader();
-                while(rdr_ACC.Read())
+                while (rdr_ACC.Read())
                 {
                     int user_idx = rdr_ACC.GetInt32(rdr_ACC.GetOrdinal("user_idx"));
                     double x = rdr_ACC.GetDouble(rdr_ACC.GetOrdinal("x"));
                     double y = rdr_ACC.GetDouble(rdr_ACC.GetOrdinal("y"));
                     double z = rdr_ACC.GetDouble(rdr_ACC.GetOrdinal("z"));
                     DateTime timestamp = rdr_ACC.GetDateTime(rdr_ACC.GetOrdinal("timestamp"));
-                    list_ACC.Add(new ACC(user_idx, x, y, z, timestamp));
+                    int k = timestamp.Hour * 60 * 60 + timestamp.Minute * 60 + timestamp.Second;
+                    int d = timestamp.Day - 11;
+                    list_ACC[d * 24 * 60 * 60 + k] = new ACC(user_idx, x, y, z, timestamp);
                 }
                 rdr_ACC.Close();
 
@@ -114,7 +116,9 @@ namespace APTP_DB_flotting_project
                     int user_idx = rdr_BPM.GetInt32(rdr_BPM.GetOrdinal("user_idx"));
                     int bpm = rdr_BPM.GetInt32(rdr_BPM.GetOrdinal("bpm"));
                     DateTime timestamp = rdr_BPM.GetDateTime(rdr_BPM.GetOrdinal("timestamp"));
-                    list_BPM.Add(new BPM(user_idx, bpm, timestamp));
+                    int k = timestamp.Hour * 60 * 60 + timestamp.Minute * 60 + timestamp.Second;
+                    int d = timestamp.Day - 11;
+                    list_BPM[d * 24 * 60 * 60 + k] = new BPM(user_idx, bpm, timestamp);
                 }
                 rdr_BPM.Close();
 
@@ -126,7 +130,9 @@ namespace APTP_DB_flotting_project
                     int user_idx = rdr_RRI.GetInt32(rdr_RRI.GetOrdinal("user_idx"));
                     int rri = rdr_RRI.GetInt32(rdr_RRI.GetOrdinal("rri"));
                     DateTime timestamp = rdr_RRI.GetDateTime(rdr_RRI.GetOrdinal("timestamp"));
-                    list_RRI.Add(new RRI(user_idx, rri, timestamp));
+                    int k = timestamp.Hour * 60 * 60 + timestamp.Minute * 60 + timestamp.Second;
+                    int d = timestamp.Day - 11;
+                    list_RRI[d * 24 * 60 * 60 + k] = new RRI(user_idx, rri, timestamp);
                 }
                 rdr_RRI.Close();
 
@@ -146,38 +152,7 @@ namespace APTP_DB_flotting_project
                     list_USER.Add(new USER(idx, email, password, name, gender, height, weight, signup_time));
                 }
                 rdr_USER.Close();
-
-                // for test
-                /*
-                Console.WriteLine("ACC");
-                for (int i = 0; i < list_ACC.Count; i++)
-                {
-                    Console.WriteLine("{0}\t\t{1}\t\t{2}\t\t{3}\t\t{4}", list_ACC[i].user_idx, 
-                        list_ACC[i].x, list_ACC[i].y, list_ACC[i].z, list_ACC[i].timestamp);
-                }
-
-                Console.WriteLine("\nBPM");
-                for (int i = 0; i < list_BPM.Count; i++)
-                {
-                    Console.WriteLine("{0}\t\t{1}\t\t{2}", list_BPM[i].user_idx,
-                        list_BPM[i].bpm, list_BPM[i].timestamp);
-                }
-
-                Console.WriteLine("\nRRI");
-                for (int i = 0; i < list_RRI.Count; i++)
-                {
-                    Console.WriteLine("{0}\t\t{1}\t\t{2}", list_RRI[i].user_idx,
-                        list_RRI[i].rri, list_RRI[i].timestamp);
-                }
-
-                Console.WriteLine("\nUSER");
-                for (int i = 0; i < list_USER.Count; i++)
-                {
-                    Console.WriteLine("{0}\t\t{1}\t\t{2}\t\t{3}\t\t{4}", list_USER[i].idx,
-                        list_USER[i].email, list_USER[i].password, list_USER[i].name, list_USER[i].gender, list_USER[i].height, list_USER[i].weight, list_USER[i].signup_time);
-                }
-                */
-                //conn.Close();
+                
             }
         }
 
