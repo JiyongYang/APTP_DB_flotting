@@ -42,10 +42,10 @@ namespace APTP_DB_flotting_project
     public struct RRI
     {
         public int user_idx;
-        public int rri;
+        public double rri;
         public DateTime timestamp;
 
-        public RRI(int user_dix, int rri, DateTime timestamp)
+        public RRI(int user_dix, double rri, DateTime timestamp)
         {
             this.user_idx = user_dix;
             this.rri = rri;
@@ -128,7 +128,7 @@ namespace APTP_DB_flotting_project
                 while (rdr_RRI.Read())
                 {
                     int user_idx = rdr_RRI.GetInt32(rdr_RRI.GetOrdinal("user_idx"));
-                    int rri = rdr_RRI.GetInt32(rdr_RRI.GetOrdinal("rri"));
+                    double rri = rdr_RRI.GetDouble(rdr_RRI.GetOrdinal("rri"));
                     DateTime timestamp = rdr_RRI.GetDateTime(rdr_RRI.GetOrdinal("timestamp"));
                     int k = timestamp.Hour * 60 * 60 + timestamp.Minute * 60 + timestamp.Second;
                     int d = timestamp.Day - 9;
@@ -213,7 +213,7 @@ namespace APTP_DB_flotting_project
                             for (int s = 0; s < 60; s++)
                             {
                                 int user_idx = 1;
-                                int rri = r.Next(50, 110);
+                                double rri = r.NextDouble();
                                 DateTime timestamp = new DateTime(2017, 10, d, h, m, s);
                                 list_RRI.Add(new RRI(user_idx, rri, timestamp));
                             }

@@ -421,7 +421,7 @@ namespace APTP_DB_flotting_project
             chart.Enable3D = true;
             chart.Width = 60.0f;
             chart.Depth = 60.0f;
-            chart.Height = 30.0f;
+            chart.Height = 60.0f;
             chart.Projection.SetPredefinedProjection(PredefinedProjection.PerspectiveTilted);
             chart.LightModel.SetPredefinedLightModel(PredefinedLightModel.MetallicLustre);
 
@@ -534,9 +534,10 @@ namespace APTP_DB_flotting_project
                 if (day_stack.ContainsKey(today) && day_stack[today] == day_flag.ToString())
                 {
                     int k = msl.list_RRI[j].timestamp.Hour * 60 * 60 + msl.list_RRI[j].timestamp.Minute * 60 + msl.list_RRI[j].timestamp.Second;
-                    for(int i=0;i<10;i++)
+                    rri_w_matrix[0][k] = msl.list_RRI[j].rri;
+                    for (int i=1;i<10;i++)
                     {
-                        rri_w_matrix[i][k] = msl.list_RRI[j].rri + r.Next(-10,10);
+                        rri_w_matrix[i][k] = msl.list_RRI[j].rri + r.NextDouble()/10.0;
                     }
                 }
             }
