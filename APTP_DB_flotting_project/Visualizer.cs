@@ -44,125 +44,36 @@ namespace APTP_DB_flotting_project
         {
             InitializeComponent();
         }
-
-        //for all data
-        //public Visualizer(mySqlLinkage _msl)
-        //{
-        //    NLicense license = new NLicense("0619cf66-9900-d103-7d02-2d6f5900b739");
-        //    NLicenseManager.Instance.SetLicense(license);
-        //    NLicenseManager.Instance.LockLicense = true;
-
-        //    InitializeComponent();
-
-        //    msl = _msl;
-        //    InitializeTime();
-        //    m_ColorTable = new Color[256];
-        //    for (int i = 0; i <= 255; i++)
-        //    {
-        //        m_ColorTable[i] = InterpolateColors(Color.Blue, Color.Red, i / 255.0f);
-        //    }
-        //    this.InitializeBarACC();
-        //    this.InitializeBPMGraph();
-        //    this.InitializeSurfaceRRI();
-        //    this.SetUserInfoLabel();
-        //}
-
-        //for realtime
-
+        
         public Visualizer(mySqlLinkage _msl)
         {
             NLicense license = new NLicense("0619cf66-9900-d103-7d02-2d6f5900b739");
             NLicenseManager.Instance.SetLicense(license);
             NLicenseManager.Instance.LockLicense = true;
+            msl = _msl;
 
             InitializeComponent();
-            dic_lb_acc = new Dictionary<string, bool>();
-            dic_lb_bpm = new Dictionary<string, bool>();
-            dic_lb_rri = new Dictionary<string, bool>();
-            date_format = "yyyyMMdd HH:mm";
-            msl = _msl;
+            //real time
+            RealtimeInitialize();
+
+            //non real time
+            //NonRealtimeInitialize();
+        }
+
+        #region NonRealtime APIs
+        public void NonRealtimeInitialize()
+        {
+            InitializeTime();
             m_ColorTable = new Color[256];
             for (int i = 0; i <= 255; i++)
             {
                 m_ColorTable[i] = InterpolateColors(Color.Blue, Color.Red, i / 255.0f);
             }
-            this.msl.Realtime_SelectUserInfoUsingReader();
+            this.InitializeBarACC();
+            this.InitializeBPMGraph();
+            this.InitializeSurfaceRRI();
             this.SetUserInfoLabel();
-        }
 
-        public static Color InterpolateColors(Color color1, Color color2, float factor)
-        {
-            int num1 = ((int)color1.R);
-            int num2 = ((int)color1.G);
-            int num3 = ((int)color1.B);
-
-            int num4 = ((int)color2.R);
-            int num5 = ((int)color2.G);
-            int num6 = ((int)color2.B);
-
-            byte num7 = (byte)((((float)num1) + (((float)(num4 - num1)) * factor)));
-            byte num8 = (byte)((((float)num2) + (((float)(num5 - num2)) * factor)));
-            byte num9 = (byte)((((float)num3) + (((float)(num6 - num3)) * factor)));
-
-            return Color.FromArgb(num7, num8, num9);
-        }
-
-        void ConfigureStandardLayout(NChartControl ncc, NChart chart, NLabel title, NLegend legend)
-        {
-            ncc.Panels.Clear();
-
-            if (title != null)
-            {
-                ncc.Panels.Add(title);
-
-                title.DockMode = PanelDockMode.Top;
-                title.Padding = new NMarginsL(5, 8, 5, 4);
-            }
-
-            if (legend != null)
-            {
-                ncc.Panels.Add(legend);
-
-                legend.DockMode = PanelDockMode.Right;
-                legend.Padding = new NMarginsL(1, 1, 5, 5);
-            }
-
-            if (chart != null)
-            {
-                ncc.Panels.Add(chart);
-
-                float topPad = (title == null) ? 11 : 8;
-                float rightPad = (legend == null) ? 11 : 4;
-
-                if (chart.BoundsMode == BoundsMode.None)
-                {
-                    if (chart.Enable3D || !(chart is NCartesianChart))
-                    {
-                        chart.BoundsMode = BoundsMode.Fit;
-                    }
-                    else
-                    {
-                        chart.BoundsMode = BoundsMode.Stretch;
-                    }
-                }
-
-                chart.DockMode = PanelDockMode.Fill;
-                chart.Padding = new NMarginsL(
-                    new NLength(11, NRelativeUnit.ParentPercentage),
-                    new NLength(topPad, NRelativeUnit.ParentPercentage),
-                    new NLength(rightPad, NRelativeUnit.ParentPercentage),
-                    new NLength(11, NRelativeUnit.ParentPercentage));
-            }
-        }
-
-        public void StartTimer()
-        {
-            this.timer1.Enabled = true;
-        }
-
-        public void PauseTimer()
-        {
-            this.timer1.Enabled = false;
         }
 
         public void OnTimerTick(object sender, EventArgs e)
@@ -747,6 +658,24 @@ namespace APTP_DB_flotting_project
             }
         }
 
+        #endregion
+
+        #region Realtime APIs
+        public void RealtimeInitialize()
+        {
+            dic_lb_acc = new Dictionary<string, bool>();
+            dic_lb_bpm = new Dictionary<string, bool>();
+            dic_lb_rri = new Dictionary<string, bool>();
+            date_format = "yyyyMMdd HH:mm";
+            m_ColorTable = new Color[256];
+            for (int i = 0; i <= 255; i++)
+            {
+                m_ColorTable[i] = InterpolateColors(Color.Blue, Color.Red, i / 255.0f);
+            }
+            this.msl.Realtime_SelectUserInfoUsingReader();
+            this.SetUserInfoLabel();
+        }
+
         public void Realtime_OnTimerTick(object sender, EventArgs e)
         {
             this.msl.Realtime_SelectUsingReader();
@@ -1093,12 +1022,90 @@ namespace APTP_DB_flotting_project
             }            
         }
 
+        #endregion
+
+        #region Common APIs
+        public static Color InterpolateColors(Color color1, Color color2, float factor)
+        {
+            int num1 = ((int)color1.R);
+            int num2 = ((int)color1.G);
+            int num3 = ((int)color1.B);
+
+            int num4 = ((int)color2.R);
+            int num5 = ((int)color2.G);
+            int num6 = ((int)color2.B);
+
+            byte num7 = (byte)((((float)num1) + (((float)(num4 - num1)) * factor)));
+            byte num8 = (byte)((((float)num2) + (((float)(num5 - num2)) * factor)));
+            byte num9 = (byte)((((float)num3) + (((float)(num6 - num3)) * factor)));
+
+            return Color.FromArgb(num7, num8, num9);
+        }
+
+        void ConfigureStandardLayout(NChartControl ncc, NChart chart, NLabel title, NLegend legend)
+        {
+            ncc.Panels.Clear();
+
+            if (title != null)
+            {
+                ncc.Panels.Add(title);
+
+                title.DockMode = PanelDockMode.Top;
+                title.Padding = new NMarginsL(5, 8, 5, 4);
+            }
+
+            if (legend != null)
+            {
+                ncc.Panels.Add(legend);
+
+                legend.DockMode = PanelDockMode.Right;
+                legend.Padding = new NMarginsL(1, 1, 5, 5);
+            }
+
+            if (chart != null)
+            {
+                ncc.Panels.Add(chart);
+
+                float topPad = (title == null) ? 11 : 8;
+                float rightPad = (legend == null) ? 11 : 4;
+
+                if (chart.BoundsMode == BoundsMode.None)
+                {
+                    if (chart.Enable3D || !(chart is NCartesianChart))
+                    {
+                        chart.BoundsMode = BoundsMode.Fit;
+                    }
+                    else
+                    {
+                        chart.BoundsMode = BoundsMode.Stretch;
+                    }
+                }
+
+                chart.DockMode = PanelDockMode.Fill;
+                chart.Padding = new NMarginsL(
+                    new NLength(11, NRelativeUnit.ParentPercentage),
+                    new NLength(topPad, NRelativeUnit.ParentPercentage),
+                    new NLength(rightPad, NRelativeUnit.ParentPercentage),
+                    new NLength(11, NRelativeUnit.ParentPercentage));
+            }
+        }
+
+        public void StartTimer()
+        {
+            this.timer1.Enabled = true;
+        }
+
+        public void PauseTimer()
+        {
+            this.timer1.Enabled = false;
+        }
+
         public void SetUserInfoLabel()
         {
             label_id.Text = "ID: " + msl.list_USER[0].idx.ToString();
             label_name.Text = "Name: " + msl.list_USER[0].name.ToString();
             label_email.Text = "E-mail: " + msl.list_USER[0].email.ToString();
-            if(msl.list_USER[0].gender == 1)
+            if (msl.list_USER[0].gender == 1)
                 label_gender.Text = "Gender: Male";
             else
                 label_gender.Text = "Gender: Female";
@@ -1128,5 +1135,6 @@ namespace APTP_DB_flotting_project
         {
             PauseTimer();
         }
+        #endregion
     }
 }

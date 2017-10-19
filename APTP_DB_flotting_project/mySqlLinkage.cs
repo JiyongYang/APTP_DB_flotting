@@ -42,10 +42,10 @@ namespace APTP_DB_flotting_project
     public struct RRI
     {
         public int user_idx;
-        public int rri;
+        public double rri;
         public DateTime timestamp;
 
-        public RRI(int user_dix, int rri, DateTime timestamp)
+        public RRI(int user_dix, double rri, DateTime timestamp)
         {
             this.user_idx = user_dix;
             this.rri = rri;
@@ -84,6 +84,86 @@ namespace APTP_DB_flotting_project
         public List<BPM> list_BPM = new List<BPM>();
         public List<RRI> list_RRI = new List<RRI>();
         public List<USER> list_USER = new List<USER>();
+
+        public void FakeDataGenerator()
+        {
+            Random r = new Random();
+            // ACC data
+            {
+                for (int d = 9; d < 14; d++)
+                {
+                    for (int h = 0; h < 24; h++)
+                    {
+                        for (int m = 0; m < 60; m++)
+                        {
+                            for (int s = 0; s < 60; s++)
+                            {
+                                int user_idx = 1;
+                                double x = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
+                                double y = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
+                                double z = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
+                                DateTime timestamp = new DateTime(2017, 10, d, h, m, s);
+                                list_ACC.Add(new ACC(user_idx, x, y, z, timestamp));
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            //BPM data
+            {
+                for (int d = 9; d < 14; d++)
+                {
+                    for (int h = 0; h < 24; h++)
+                    {
+                        for (int m = 0; m < 60; m++)
+                        {
+                            for (int s = 0; s < 60; s++)
+                            {
+                                int user_idx = 1;
+                                int bpm = r.Next(50, 110);
+                                DateTime timestamp = new DateTime(2017, 10, d, h, m, s);
+                                list_BPM.Add(new BPM(user_idx, bpm, timestamp));
+                            }
+                        }
+                    }
+                }
+            }
+
+            //RRI data
+            {
+                for (int d = 9; d < 14; d++)
+                {
+                    for (int h = 0; h < 24; h++)
+                    {
+                        for (int m = 0; m < 60; m++)
+                        {
+                            for (int s = 0; s < 60; s++)
+                            {
+                                int user_idx = 1;
+                                double rri = r.NextDouble();
+                                DateTime timestamp = new DateTime(2017, 10, d, h, m, s);
+                                list_RRI.Add(new RRI(user_idx, rri, timestamp));
+                            }
+                        }
+                    }
+                }
+            }
+
+            //User info data
+            {
+                int idx = 1;
+                string email = "elleinuo0@gmail.com";
+                string password = "qwer1234";
+                string name = "Handong Kim";
+                int gender = 1;
+                double weight = 69.7;
+                double height = 173.4;
+                DateTime signup_time = new DateTime(2017, 10, 14);
+                list_USER.Add(new USER(idx, email, password, name, gender, height, weight, signup_time));
+            }
+        }
 
         public void SelectUsingReader()
         {
@@ -238,72 +318,8 @@ namespace APTP_DB_flotting_project
 
         }
 
-        public void FakeDataGenerator()
+        public void Realtime_FakeUserInfoGenerator()
         {
-            Random r = new Random();
-            // ACC data
-            {
-                for(int d = 9;d<14;d++)
-                {
-                    for (int h = 0; h < 24; h++)
-                    {
-                        for (int m = 0; m < 60; m++)
-                        {
-                            for (int s = 0; s < 60; s++)
-                            {
-                                int user_idx = 1;
-                                double x = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
-                                double y = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
-                                double z = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
-                                DateTime timestamp = new DateTime(2017, 10, d, h, m, s);
-                                list_ACC.Add(new ACC(user_idx, x, y, z, timestamp));
-                            }
-                        }
-                    }
-
-                }
-            }
-
-            //BPM data
-            {
-                for (int d = 9; d < 14; d++)
-                {
-                    for (int h = 0; h < 24; h++)
-                    {
-                        for (int m = 0; m < 60; m++)
-                        {
-                            for (int s = 0; s < 60; s++)
-                            {
-                                int user_idx = 1;
-                                int bpm = r.Next(50, 110);
-                                DateTime timestamp = new DateTime(2017, 10, d, h, m, s);
-                                list_BPM.Add(new BPM(user_idx, bpm, timestamp));
-                            }
-                        }
-                    }
-                }                    
-            }
-
-            //RRI data
-            {
-                for (int d = 9; d < 14; d++)
-                {
-                    for (int h = 0; h < 24; h++)
-                    {
-                        for (int m = 0; m < 60; m++)
-                        {
-                            for (int s = 0; s < 60; s++)
-                            {
-                                int user_idx = 1;
-                                int rri = r.Next(50, 110);
-                                DateTime timestamp = new DateTime(2017, 10, d, h, m, s);
-                                list_RRI.Add(new RRI(user_idx, rri, timestamp));
-                            }
-                        }
-                    }
-                }                    
-            }
-
             //User info data
             {
                 int idx = 1;
@@ -313,9 +329,68 @@ namespace APTP_DB_flotting_project
                 int gender = 1;
                 double weight = 69.7;
                 double height = 173.4;
-                DateTime signup_time = new DateTime(2017, 10, 14);
+                DateTime signup_time = DateTime.Now;
+                list_USER.Add(new USER(idx, email, password, name, gender, height, weight, signup_time));
+
+                idx = 2;
+                email = "chj4219@gmail.com";
+                password = "asdf2345";
+                name = "Handong Choi";
+                gender = 2;
+                weight = 53.3;
+                height = 168.1;
+                signup_time = DateTime.Now;
+                list_USER.Add(new USER(idx, email, password, name, gender, height, weight, signup_time));
+
+                idx = 3;
+                email = "wbqd@gmail.com";
+                password = "zxcv3456";
+                name = "Handong Jung";
+                gender = 1;
+                weight = 78.1;
+                height = 181.2;
+                signup_time = DateTime.Now;
                 list_USER.Add(new USER(idx, email, password, name, gender, height, weight, signup_time));
             }
+        }
+
+        public void Realtime_FakeDataGenerator(int given_idx)
+        {
+            Random r = new Random();
+            DateTime cur_time = DateTime.Now;
+
+            // ACC data
+            {
+                for (DateTime time = cur_time.AddSeconds(-60); time < cur_time; time = time.AddSeconds(1))
+                {
+                    int user_idx = given_idx;
+                    double x = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
+                    double y = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
+                    double z = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
+                    list_ACC.Add(new ACC(user_idx, x, y, z, time));
+                    Console.WriteLine(time);
+                }
+            }
+
+            //BPM data
+            {
+                for (DateTime time = cur_time.AddSeconds(-60); time < cur_time; time = time.AddSeconds(1))
+                {
+                    int user_idx = given_idx;
+                    int bpm = r.Next(50, 110);
+                    list_BPM.Add(new BPM(user_idx, bpm, time));
+                }
+            }
+
+            //RRI data
+            {
+                for (DateTime time = cur_time.AddSeconds(-60); time < cur_time; time = time.AddSeconds(1))
+                {
+                    int user_idx = given_idx;
+                    double rri = r.NextDouble();
+                    list_RRI.Add(new RRI(user_idx, rri, time));
+                }
+            }            
         }
     }
 }
