@@ -167,7 +167,7 @@ namespace APTP_DB_flotting_project
 
         public void SelectUsingReader()
         {
-            string strConn = "Server=localhost;Database=aptp;Uid=aptp;Pwd=aptp1000;";
+            string strConn = "Server=localhost;Database=aptp;Uid=aptp;Pwd=aptp1100;";
 
             using (MySqlConnection conn = new MySqlConnection(strConn))
             {
@@ -238,7 +238,7 @@ namespace APTP_DB_flotting_project
 
         public void Realtime_SelectUsingReader(int user_id)
         {
-            string strConn = "Server=localhost;Database=aptp;Uid=aptp;Pwd=aptp1000;";
+            string strConn = "Server=localhost;Database=aptp;Uid=aptp;Pwd=aptp1100;";
 
             using (MySqlConnection conn = new MySqlConnection(strConn))
             {
@@ -248,15 +248,15 @@ namespace APTP_DB_flotting_project
 
                 conn.Open();
                 int acc_length;
-                string sql_ACC_LENGTH = "SELECT count(*) from ACC where user_idx == " + user_id.ToString();
+                string sql_ACC_LENGTH = "SELECT count(*) from ACC where user_idx = " + user_id.ToString();
                 MySqlCommand cmd_ACC_LENGTH = new MySqlCommand(sql_ACC_LENGTH, conn);
                 acc_length = Convert.ToInt32(cmd_ACC_LENGTH.ExecuteScalar());
 
                 string sql_ACC;
                 if (acc_length < 60)
-                    sql_ACC = "SELECT * FROM ACC where user_idx == " + user_id.ToString() + " LIMIT 0," + acc_length;
+                    sql_ACC = "SELECT * FROM ACC where user_idx = " + user_id.ToString() + " LIMIT 0," + acc_length;
                 else
-                    sql_ACC = "SELECT * FROM ACC where user_idx == " + user_id.ToString() + " LIMIT " + (acc_length - 60) + ",60";
+                    sql_ACC = "SELECT * FROM ACC where user_idx = " + user_id.ToString() + " LIMIT " + (acc_length - 60) + ",60";
 
                 MySqlCommand cmd_ACC = new MySqlCommand(sql_ACC, conn);
                 MySqlDataReader rdr_ACC = cmd_ACC.ExecuteReader();
@@ -273,15 +273,15 @@ namespace APTP_DB_flotting_project
                 rdr_ACC.Close();
 
                 int bpm_length;
-                string sql_BPM_LENGTH = "SELECT count(*) from BPM where user_idx == " + user_id.ToString();
+                string sql_BPM_LENGTH = "SELECT count(*) from BPM where user_idx = " + user_id.ToString();
                 MySqlCommand cmd_BPM_LENGTH = new MySqlCommand(sql_BPM_LENGTH, conn);
                 bpm_length = Convert.ToInt32(cmd_BPM_LENGTH.ExecuteScalar());
 
                 string sql_BPM;
                 if (acc_length < 60)
-                    sql_BPM = "SELECT * FROM BPM where user_idx == " + user_id.ToString() + " LIMIT 0," + bpm_length;
+                    sql_BPM = "SELECT * FROM BPM where user_idx = " + user_id.ToString() + " LIMIT 0," + bpm_length;
                 else
-                    sql_BPM = "SELECT * FROM BPM where user_idx == " + user_id.ToString() + " LIMIT " + (bpm_length - 60) + ",60";
+                    sql_BPM = "SELECT * FROM BPM where user_idx = " + user_id.ToString() + " LIMIT " + (bpm_length - 60) + ",60";
 
                 MySqlCommand cmd_BPM = new MySqlCommand(sql_BPM, conn);
                 MySqlDataReader rdr_BPM = cmd_BPM.ExecuteReader();
@@ -296,15 +296,15 @@ namespace APTP_DB_flotting_project
                 rdr_BPM.Close();
 
                 int rri_length;
-                string sql_RRI_LENGTH = "SELECT count(*) from RRI where user_idx == " + user_id.ToString();
+                string sql_RRI_LENGTH = "SELECT count(*) from RRI where user_idx = " + user_id.ToString();
                 MySqlCommand cmd_RRI_LENGTH = new MySqlCommand(sql_RRI_LENGTH, conn);
                 rri_length = Convert.ToInt32(cmd_RRI_LENGTH.ExecuteScalar());
 
                 string sql_RRI;
                 if (rri_length < 60)
-                    sql_RRI = "SELECT * FROM RRI where user_idx == " + user_id.ToString() + " LIMIT 0," + rri_length;
+                    sql_RRI = "SELECT * FROM RRI where user_idx = " + user_id.ToString() + " LIMIT 0," + rri_length;
                 else
-                    sql_RRI = "SELECT * FROM RRI where user_idx == " + user_id.ToString() + " LIMIT " + (rri_length - 60) + ",60";
+                    sql_RRI = "SELECT * FROM RRI where user_idx = " + user_id.ToString() + " LIMIT " + (rri_length - 60) + ",60";
 
                 MySqlCommand cmd_RRI = new MySqlCommand(sql_RRI, conn);
                 MySqlDataReader rdr_RRI = cmd_RRI.ExecuteReader();
@@ -322,7 +322,7 @@ namespace APTP_DB_flotting_project
 
         public void Realtime_SelectUserInfoUsingReader()
         {
-            string strConn = "Server=localhost;Database=aptp;Uid=aptp;Pwd=aptp1000;";
+            string strConn = "Server=localhost;Database=aptp;Uid=aptp;Pwd=aptp1100;";
 
             using (MySqlConnection conn = new MySqlConnection(strConn))
             {
