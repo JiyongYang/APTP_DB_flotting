@@ -924,6 +924,10 @@ namespace APTP_DB_flotting_project
                     int color_var = 0;
                     if (!barValues[j].Equals(0))
                         color_var = (int)((barValues[j] + 2) * 60);
+                    if (color_var > 255)
+                        color_var = 255;
+                    else if (color_var < 0)
+                        color_var = 0;
 
                     if (j >= fillStyleCount)
                     {
