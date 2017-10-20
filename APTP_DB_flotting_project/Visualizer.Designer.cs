@@ -52,9 +52,22 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.listBox_acc_log = new System.Windows.Forms.ListBox();
-            this.listBox_bpm_log = new System.Windows.Forms.ListBox();
-            this.listBox_rri_log = new System.Windows.Forms.ListBox();
+            this.dgv_acc_log = new System.Windows.Forms.DataGridView();
+            this.col_acc_time = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_acc_x = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_acc_y = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_acc_z = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgv_bpm_log = new System.Windows.Forms.DataGridView();
+            this.col_bpm_time = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_bpm = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgv_rri_log = new System.Windows.Forms.DataGridView();
+            this.col_rri_time = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_rri = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.button_excel_export = new System.Windows.Forms.Button();
+            this.comboBox_id = new System.Windows.Forms.ComboBox();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_acc_log)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_bpm_log)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_rri_log)).BeginInit();
             this.SuspendLayout();
             // 
             // label_id
@@ -272,41 +285,131 @@
             this.label7.TabIndex = 19;
             this.label7.Text = "RRI Log";
             // 
-            // listBox_acc_log
+            // dgv_acc_log
             // 
-            this.listBox_acc_log.FormattingEnabled = true;
-            this.listBox_acc_log.ItemHeight = 12;
-            this.listBox_acc_log.Location = new System.Drawing.Point(1209, 24);
-            this.listBox_acc_log.Name = "listBox_acc_log";
-            this.listBox_acc_log.Size = new System.Drawing.Size(660, 292);
-            this.listBox_acc_log.TabIndex = 20;
+            this.dgv_acc_log.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_acc_log.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.col_acc_time,
+            this.col_acc_x,
+            this.col_acc_y,
+            this.col_acc_z});
+            this.dgv_acc_log.Location = new System.Drawing.Point(1209, 24);
+            this.dgv_acc_log.Name = "dgv_acc_log";
+            this.dgv_acc_log.RowTemplate.Height = 23;
+            this.dgv_acc_log.Size = new System.Drawing.Size(660, 292);
+            this.dgv_acc_log.TabIndex = 21;
             // 
-            // listBox_bpm_log
+            // col_acc_time
             // 
-            this.listBox_bpm_log.FormattingEnabled = true;
-            this.listBox_bpm_log.ItemHeight = 12;
-            this.listBox_bpm_log.Location = new System.Drawing.Point(1209, 374);
-            this.listBox_bpm_log.Name = "listBox_bpm_log";
-            this.listBox_bpm_log.Size = new System.Drawing.Size(660, 292);
-            this.listBox_bpm_log.TabIndex = 20;
+            this.col_acc_time.HeaderText = "Time";
+            this.col_acc_time.Name = "col_acc_time";
+            this.col_acc_time.ReadOnly = true;
+            this.col_acc_time.Width = 120;
             // 
-            // listBox_rri_log
+            // col_acc_x
             // 
-            this.listBox_rri_log.FormattingEnabled = true;
-            this.listBox_rri_log.ItemHeight = 12;
-            this.listBox_rri_log.Location = new System.Drawing.Point(1207, 737);
-            this.listBox_rri_log.Name = "listBox_rri_log";
-            this.listBox_rri_log.Size = new System.Drawing.Size(660, 292);
-            this.listBox_rri_log.TabIndex = 20;
+            this.col_acc_x.HeaderText = "ACC_X";
+            this.col_acc_x.Name = "col_acc_x";
+            this.col_acc_x.ReadOnly = true;
+            this.col_acc_x.Width = 165;
+            // 
+            // col_acc_y
+            // 
+            this.col_acc_y.HeaderText = "ACC_Y";
+            this.col_acc_y.Name = "col_acc_y";
+            this.col_acc_y.ReadOnly = true;
+            this.col_acc_y.Width = 165;
+            // 
+            // col_acc_z
+            // 
+            this.col_acc_z.HeaderText = "ACC_Z";
+            this.col_acc_z.Name = "col_acc_z";
+            this.col_acc_z.ReadOnly = true;
+            this.col_acc_z.Width = 165;
+            // 
+            // dgv_bpm_log
+            // 
+            this.dgv_bpm_log.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_bpm_log.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.col_bpm_time,
+            this.col_bpm});
+            this.dgv_bpm_log.Location = new System.Drawing.Point(1209, 374);
+            this.dgv_bpm_log.Name = "dgv_bpm_log";
+            this.dgv_bpm_log.RowTemplate.Height = 23;
+            this.dgv_bpm_log.Size = new System.Drawing.Size(660, 292);
+            this.dgv_bpm_log.TabIndex = 22;
+            // 
+            // col_bpm_time
+            // 
+            this.col_bpm_time.HeaderText = "Time";
+            this.col_bpm_time.Name = "col_bpm_time";
+            this.col_bpm_time.ReadOnly = true;
+            this.col_bpm_time.Width = 120;
+            // 
+            // col_bpm
+            // 
+            this.col_bpm.HeaderText = "BPM";
+            this.col_bpm.Name = "col_bpm";
+            this.col_bpm.ReadOnly = true;
+            this.col_bpm.Width = 495;
+            // 
+            // dgv_rri_log
+            // 
+            this.dgv_rri_log.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_rri_log.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.col_rri_time,
+            this.col_rri});
+            this.dgv_rri_log.Location = new System.Drawing.Point(1209, 737);
+            this.dgv_rri_log.Name = "dgv_rri_log";
+            this.dgv_rri_log.RowTemplate.Height = 23;
+            this.dgv_rri_log.Size = new System.Drawing.Size(660, 292);
+            this.dgv_rri_log.TabIndex = 23;
+            // 
+            // col_rri_time
+            // 
+            this.col_rri_time.HeaderText = "Time";
+            this.col_rri_time.Name = "col_rri_time";
+            this.col_rri_time.ReadOnly = true;
+            this.col_rri_time.Width = 120;
+            // 
+            // col_rri
+            // 
+            this.col_rri.HeaderText = "RRI";
+            this.col_rri.Name = "col_rri";
+            this.col_rri.ReadOnly = true;
+            this.col_rri.Width = 495;
+            // 
+            // button_excel_export
+            // 
+            this.button_excel_export.Location = new System.Drawing.Point(44, 463);
+            this.button_excel_export.Name = "button_excel_export";
+            this.button_excel_export.Size = new System.Drawing.Size(96, 41);
+            this.button_excel_export.TabIndex = 24;
+            this.button_excel_export.Text = "Export to Excel";
+            this.button_excel_export.UseVisualStyleBackColor = true;
+            this.button_excel_export.Click += new System.EventHandler(this.button_excel_export_Click);
+            // 
+            // comboBox_id
+            // 
+            this.comboBox_id.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_id.FormattingEnabled = true;
+            this.comboBox_id.Location = new System.Drawing.Point(78, 78);
+            this.comboBox_id.Name = "comboBox_id";
+            this.comboBox_id.Size = new System.Drawing.Size(121, 20);
+            this.comboBox_id.Sorted = true;
+            this.comboBox_id.TabIndex = 25;
+            this.comboBox_id.SelectedIndexChanged += new System.EventHandler(this.comboBox_id_SelectedIndexChanged);
             // 
             // Visualizer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 1041);
-            this.Controls.Add(this.listBox_rri_log);
-            this.Controls.Add(this.listBox_bpm_log);
-            this.Controls.Add(this.listBox_acc_log);
+            this.Controls.Add(this.comboBox_id);
+            this.Controls.Add(this.button_excel_export);
+            this.Controls.Add(this.dgv_rri_log);
+            this.Controls.Add(this.dgv_bpm_log);
+            this.Controls.Add(this.dgv_acc_log);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -330,6 +433,9 @@
             this.Controls.Add(this.label_id);
             this.Name = "Visualizer";
             this.Text = "Visualizer";
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_acc_log)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_bpm_log)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_rri_log)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -358,9 +464,19 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.ListBox listBox_acc_log;
-        private System.Windows.Forms.ListBox listBox_bpm_log;
-        private System.Windows.Forms.ListBox listBox_rri_log;
+        private System.Windows.Forms.DataGridView dgv_acc_log;
+        private System.Windows.Forms.DataGridView dgv_bpm_log;
+        private System.Windows.Forms.DataGridView dgv_rri_log;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_acc_time;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_acc_x;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_acc_y;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_acc_z;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_bpm_time;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_bpm;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_rri_time;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_rri;
+        private System.Windows.Forms.Button button_excel_export;
+        private System.Windows.Forms.ComboBox comboBox_id;
     }
 }
 

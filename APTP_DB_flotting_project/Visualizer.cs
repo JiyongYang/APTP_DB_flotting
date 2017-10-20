@@ -34,11 +34,13 @@ namespace APTP_DB_flotting_project
         public Color[] m_ColorTable;
         public int day_flag;
         public Dictionary<string, string> day_stack;
-        public Dictionary<string, bool> dic_lb_acc;
-        public Dictionary<string, bool> dic_lb_bpm;
-        public Dictionary<string, bool> dic_lb_rri;
+        public Dictionary<ACC, bool> dic_log_acc;
+        public Dictionary<BPM, bool> dic_log_bpm;
+        public Dictionary<RRI, bool> dic_log_rri;
         public int sec_flag;
         public string date_format;
+
+        public int selected_user_id;
 
         public Visualizer()
         {
@@ -53,16 +55,22 @@ namespace APTP_DB_flotting_project
             msl = _msl;
 
             InitializeComponent();
-            //real time
-            RealtimeInitialize();
-
+            
             //non real time
             //NonRealtimeInitialize();
+
+            //real time
+            RealtimeInitialize();
         }
 
         #region NonRealtime APIs
         public void NonRealtimeInitialize()
         {
+            //fake data
+            //this.msl.FakeDataGenerator();
+            //real data
+            this.msl.SelectUsingReader();
+
             InitializeTime();
             m_ColorTable = new Color[256];
             for (int i = 0; i <= 255; i++)
@@ -443,8 +451,7 @@ namespace APTP_DB_flotting_project
                 }
             }
         }
-
-        // for BPM
+        
         private void ConfigureAxis(NAxis axis, float beginPercent, float endPercent, string title)
         {
             NLinearScaleConfigurator scale = new NLinearScaleConfigurator();
@@ -579,84 +586,84 @@ namespace APTP_DB_flotting_project
 
         public void SetLogTextBoxes()
         {
-            //add 60 text to box
-            if(sec_flag == 0)
-            {
-                string date;
-                int s_hour, s_min, s_sec;
-                if (!day_stack.ContainsValue(day_flag.ToString()))
-                {
-                    //error
-                }
-                date = day_stack.FirstOrDefault(x => x.Value == day_flag.ToString()).Key;
-                s_hour = sec_flag / (60 * 60);
-                s_min = (sec_flag - s_hour * 60 * 60) / 60;
-                s_sec = sec_flag % 60;
+            ////add 60 text to box
+            //if(sec_flag == 0)
+            //{
+            //    string date;
+            //    int s_hour, s_min, s_sec;
+            //    if (!day_stack.ContainsValue(day_flag.ToString()))
+            //    {
+            //        //error
+            //    }
+            //    date = day_stack.FirstOrDefault(x => x.Value == day_flag.ToString()).Key;
+            //    s_hour = sec_flag / (60 * 60);
+            //    s_min = (sec_flag - s_hour * 60 * 60) / 60;
+            //    s_sec = sec_flag % 60;
 
-                //acc log
-                for (int i = day_flag * 24 * 60 * 60; i < (day_flag * 24 * 60 * 60) + 60; i++)
-                {
-                    s_sec = i - (day_flag * 24 * 60 * 60);
-                    date = day_stack.FirstOrDefault(x => x.Value == day_flag.ToString()).Key + " " + s_hour.ToString("D2") + ":" + s_min.ToString("D2") + ":" + s_sec.ToString("D2");
-                    //textBox_aac_log.Text += date + "\r\nacc_x: " + acc_w_matrix[0][i] + "\r\nacc_y: " + acc_w_matrix[1][i] + "\r\nacc_z: " + acc_w_matrix[2][i] + "\r\n";
-                    listBox_acc_log.Items.Add(date + "  acc_x: " + acc_w_matrix[0][i] + "\tacc_y: " + acc_w_matrix[1][i] + "\tacc_z: " + acc_w_matrix[2][i]);
-                    this.listBox_acc_log.SelectedIndex = this.listBox_acc_log.Items.Count - 1;
-                }
+            //    //acc log
+            //    for (int i = day_flag * 24 * 60 * 60; i < (day_flag * 24 * 60 * 60) + 60; i++)
+            //    {
+            //        s_sec = i - (day_flag * 24 * 60 * 60);
+            //        date = day_stack.FirstOrDefault(x => x.Value == day_flag.ToString()).Key + " " + s_hour.ToString("D2") + ":" + s_min.ToString("D2") + ":" + s_sec.ToString("D2");
+            //        //textBox_aac_log.Text += date + "\r\nacc_x: " + acc_w_matrix[0][i] + "\r\nacc_y: " + acc_w_matrix[1][i] + "\r\nacc_z: " + acc_w_matrix[2][i] + "\r\n";
+            //        listBox_acc_log.Items.Add(date + "  acc_x: " + acc_w_matrix[0][i] + "\tacc_y: " + acc_w_matrix[1][i] + "\tacc_z: " + acc_w_matrix[2][i]);
+            //        this.listBox_acc_log.SelectedIndex = this.listBox_acc_log.Items.Count - 1;
+            //    }
 
-                //bpm log
-                for (int i = day_flag * 24 * 60 * 60; i < (day_flag * 24 * 60 * 60) + 60; i++)
-                {
-                    s_sec = i - (day_flag * 24 * 60 * 60);
-                    date = day_stack.FirstOrDefault(x => x.Value == day_flag.ToString()).Key + " " + s_hour.ToString("D2") + ":" + s_min.ToString("D2") + ":" + s_sec.ToString("D2");
-                    //textBox_bpm_log.Text += date + "\tbpm: " + bpm_w_matrix[i] + "\r\n";
-                    listBox_bpm_log.Items.Add(date + "  bpm: " + bpm_w_matrix[i]);
-                    this.listBox_bpm_log.SelectedIndex = this.listBox_bpm_log.Items.Count - 1;
-                }
+            //    //bpm log
+            //    for (int i = day_flag * 24 * 60 * 60; i < (day_flag * 24 * 60 * 60) + 60; i++)
+            //    {
+            //        s_sec = i - (day_flag * 24 * 60 * 60);
+            //        date = day_stack.FirstOrDefault(x => x.Value == day_flag.ToString()).Key + " " + s_hour.ToString("D2") + ":" + s_min.ToString("D2") + ":" + s_sec.ToString("D2");
+            //        //textBox_bpm_log.Text += date + "\tbpm: " + bpm_w_matrix[i] + "\r\n";
+            //        listBox_bpm_log.Items.Add(date + "  bpm: " + bpm_w_matrix[i]);
+            //        this.listBox_bpm_log.SelectedIndex = this.listBox_bpm_log.Items.Count - 1;
+            //    }
 
-                //rri log
-                for (int i = day_flag * 24 * 60 * 60; i < (day_flag * 24 * 60 * 60) + 60; i++)
-                {
-                    s_sec = i - (day_flag * 24 * 60 * 60);
-                    date = day_stack.FirstOrDefault(x => x.Value == day_flag.ToString()).Key + " " + s_hour.ToString("D2") + ":" + s_min.ToString("D2") + ":" + s_sec.ToString("D2");
-                    //textBox_rri_log.Text += date + "\trri: " + rri_w_matrix[0][i] + "\r\n";
-                    listBox_rri_log.Items.Add(date + "  rri: " + rri_w_matrix[0][i]);
-                    this.listBox_rri_log.SelectedIndex = this.listBox_rri_log.Items.Count - 1;
-                }
-            }
-            else
-            {
-                string date;
-                int s_hour, s_min, s_sec;
-                if (!day_stack.ContainsValue(day_flag.ToString()))
-                {
-                    //error
-                }
+            //    //rri log
+            //    for (int i = day_flag * 24 * 60 * 60; i < (day_flag * 24 * 60 * 60) + 60; i++)
+            //    {
+            //        s_sec = i - (day_flag * 24 * 60 * 60);
+            //        date = day_stack.FirstOrDefault(x => x.Value == day_flag.ToString()).Key + " " + s_hour.ToString("D2") + ":" + s_min.ToString("D2") + ":" + s_sec.ToString("D2");
+            //        //textBox_rri_log.Text += date + "\trri: " + rri_w_matrix[0][i] + "\r\n";
+            //        listBox_rri_log.Items.Add(date + "  rri: " + rri_w_matrix[0][i]);
+            //        this.listBox_rri_log.SelectedIndex = this.listBox_rri_log.Items.Count - 1;
+            //    }
+            //}
+            //else
+            //{
+            //    string date;
+            //    int s_hour, s_min, s_sec;
+            //    if (!day_stack.ContainsValue(day_flag.ToString()))
+            //    {
+            //        //error
+            //    }
                 
-                if (sec_flag + 59 <= 24 * 60 * 60)
-                {
-                    date = day_stack.FirstOrDefault(x => x.Value == day_flag.ToString()).Key;
-                    s_hour = (sec_flag+59) / (60 * 60);
-                    s_min = ((sec_flag + 59) - s_hour * 60 * 60) / 60;
-                    s_sec = (sec_flag + 59) % 60;
+            //    if (sec_flag + 59 <= 24 * 60 * 60)
+            //    {
+            //        date = day_stack.FirstOrDefault(x => x.Value == day_flag.ToString()).Key;
+            //        s_hour = (sec_flag+59) / (60 * 60);
+            //        s_min = ((sec_flag + 59) - s_hour * 60 * 60) / 60;
+            //        s_sec = (sec_flag + 59) % 60;
 
-                    date = day_stack.FirstOrDefault(x => x.Value == day_flag.ToString()).Key + " " + s_hour.ToString("D2") + ":" + s_min.ToString("D2") + ":" + s_sec.ToString("D2");
-                    //acc log
-                    //textBox_aac_log.Text += date + "\r\nacc_x: " + acc_w_matrix[0][day_flag*24*60*60 + sec_flag + 59] + "\r\nacc_y: " + acc_w_matrix[1][day_flag * 24 * 60 * 60 + sec_flag + 59] 
-                    //    + "\r\nacc_z: " + acc_w_matrix[2][day_flag * 24 * 60 * 60 + sec_flag + 59] + "\r\n";
-                    listBox_acc_log.Items.Add(date + "  acc_x: " + acc_w_matrix[0][day_flag * 24 * 60 * 60 + sec_flag + 59] + "\tacc_y: " + acc_w_matrix[1][day_flag * 24 * 60 * 60 + sec_flag + 59] + "\tacc_z: " + acc_w_matrix[2][day_flag * 24 * 60 * 60 + sec_flag + 59]);
-                    this.listBox_acc_log.SelectedIndex = this.listBox_acc_log.Items.Count - 1;
+            //        date = day_stack.FirstOrDefault(x => x.Value == day_flag.ToString()).Key + " " + s_hour.ToString("D2") + ":" + s_min.ToString("D2") + ":" + s_sec.ToString("D2");
+            //        //acc log
+            //        //textBox_aac_log.Text += date + "\r\nacc_x: " + acc_w_matrix[0][day_flag*24*60*60 + sec_flag + 59] + "\r\nacc_y: " + acc_w_matrix[1][day_flag * 24 * 60 * 60 + sec_flag + 59] 
+            //        //    + "\r\nacc_z: " + acc_w_matrix[2][day_flag * 24 * 60 * 60 + sec_flag + 59] + "\r\n";
+            //        listBox_acc_log.Items.Add(date + "  acc_x: " + acc_w_matrix[0][day_flag * 24 * 60 * 60 + sec_flag + 59] + "\tacc_y: " + acc_w_matrix[1][day_flag * 24 * 60 * 60 + sec_flag + 59] + "\tacc_z: " + acc_w_matrix[2][day_flag * 24 * 60 * 60 + sec_flag + 59]);
+            //        this.listBox_acc_log.SelectedIndex = this.listBox_acc_log.Items.Count - 1;
 
-                    //bpm log
-                    //textBox_bpm_log.Text += date + "\tbpm: " + bpm_w_matrix[day_flag * 24 * 60 * 60 + sec_flag + 59] + "\r\n";
-                    listBox_bpm_log.Items.Add(date + "  bpm: " + bpm_w_matrix[day_flag * 24 * 60 * 60 + sec_flag + 59]);
-                    this.listBox_bpm_log.SelectedIndex = this.listBox_bpm_log.Items.Count - 1;
+            //        //bpm log
+            //        //textBox_bpm_log.Text += date + "\tbpm: " + bpm_w_matrix[day_flag * 24 * 60 * 60 + sec_flag + 59] + "\r\n";
+            //        listBox_bpm_log.Items.Add(date + "  bpm: " + bpm_w_matrix[day_flag * 24 * 60 * 60 + sec_flag + 59]);
+            //        this.listBox_bpm_log.SelectedIndex = this.listBox_bpm_log.Items.Count - 1;
 
-                    //rri log
-                    //textBox_rri_log.Text += date + "\trri: " + rri_w_matrix[0][day_flag * 24 * 60 * 60 + sec_flag + 59] + "\r\n";
-                    listBox_rri_log.Items.Add(date + "  rri: " + rri_w_matrix[0][day_flag * 24 * 60 * 60 + sec_flag + 59]);
-                    this.listBox_rri_log.SelectedIndex = this.listBox_rri_log.Items.Count - 1;
-                }
-            }
+            //        //rri log
+            //        //textBox_rri_log.Text += date + "\trri: " + rri_w_matrix[0][day_flag * 24 * 60 * 60 + sec_flag + 59] + "\r\n";
+            //        listBox_rri_log.Items.Add(date + "  rri: " + rri_w_matrix[0][day_flag * 24 * 60 * 60 + sec_flag + 59]);
+            //        this.listBox_rri_log.SelectedIndex = this.listBox_rri_log.Items.Count - 1;
+            //    }
+            //}
         }
 
         #endregion
@@ -664,22 +671,31 @@ namespace APTP_DB_flotting_project
         #region Realtime APIs
         public void RealtimeInitialize()
         {
-            dic_lb_acc = new Dictionary<string, bool>();
-            dic_lb_bpm = new Dictionary<string, bool>();
-            dic_lb_rri = new Dictionary<string, bool>();
-            date_format = "yyyyMMdd HH:mm";
+            dic_log_acc = new Dictionary<ACC, bool>();
+            dic_log_bpm = new Dictionary<BPM, bool>();
+            dic_log_rri = new Dictionary<RRI, bool>();
+
+            date_format = "yyyyMMdd HH:mm:ss";
             m_ColorTable = new Color[256];
             for (int i = 0; i <= 255; i++)
             {
                 m_ColorTable[i] = InterpolateColors(Color.Blue, Color.Red, i / 255.0f);
             }
+            //fake data
+            //this.msl.Realtime_FakeUserInfoGenerator();
+            //real data
             this.msl.Realtime_SelectUserInfoUsingReader();
-            this.SetUserInfoLabel();
+            SetcomboBox_id_Items();
+            selected_user_id = -1;
         }
 
         public void Realtime_OnTimerTick(object sender, EventArgs e)
         {
-            this.msl.Realtime_SelectUsingReader();
+            //real data
+            this.msl.Realtime_SelectUsingReader(selected_user_id);
+
+            //fake data
+            //this.msl.Realtime_FakeDataGenerator(selected_user_id);
 
             Realtime_UpdateBarACC();
             Realtime_UpdateLineBPM();
@@ -763,6 +779,8 @@ namespace APTP_DB_flotting_project
 
             NChartPalette palette = new NChartPalette(ChartPredefinedPalette.Fresh);
 
+            chart.Series.Clear();
+
             //bar initialize
             for (int i = 0; i < 3; i++)
             {
@@ -820,6 +838,8 @@ namespace APTP_DB_flotting_project
             ordinalScale.MajorGridStyle.SetShowAtWall(ChartWallType.Left, true);
             ordinalScale.DisplayDataPointsBetweenTicks = false;
 
+            chart.Series.Clear();
+
             // add the surface series
             NGridSurfaceSeries surface = new NGridSurfaceSeries();
             chart.Series.Add(surface);
@@ -852,6 +872,8 @@ namespace APTP_DB_flotting_project
 
             NAxis axis1 = chart.Axis(StandardAxis.PrimaryY);
             ConfigureAxis(axis1, 0, 100, "Time");
+
+            chart.Series.Clear();
 
             m_BPMLine = CreateLineSeries();
             chart.Series.Add(m_BPMLine);
@@ -980,47 +1002,67 @@ namespace APTP_DB_flotting_project
         {
             for (int i = 0; i < msl.list_ACC.Count; i++)
             {
-                if (!dic_lb_acc.ContainsKey(msl.list_ACC[i].timestamp.ToString(date_format) + "  acc_x: " + msl.list_ACC[i].x + "\tacc_y: " + msl.list_ACC[i].y + "\tacc_z: " + msl.list_ACC[i].z))
-                    dic_lb_acc.Add(msl.list_ACC[i].timestamp.ToString(date_format) + "  acc_x: " + msl.list_ACC[i].x + "\tacc_y: " + msl.list_ACC[i].y + "\tacc_z: " + msl.list_ACC[i].z, false);
+                if (!dic_log_acc.ContainsKey(msl.list_ACC[i]))
+                    dic_log_acc.Add(msl.list_ACC[i], false);
             }
             for (int i = 0; i < msl.list_BPM.Count; i++)
             {
-                if (!dic_lb_bpm.ContainsKey(msl.list_BPM[i].timestamp.ToString(date_format) + "  bpm: " + msl.list_BPM[i].bpm))
-                    dic_lb_bpm.Add(msl.list_ACC[i].timestamp.ToString(date_format) + "  bpm: " + msl.list_BPM[i].bpm, false);
+                if (!dic_log_bpm.ContainsKey(msl.list_BPM[i]))
+                    dic_log_bpm.Add(msl.list_BPM[i], false);
             }
             for (int i = 0; i < msl.list_RRI.Count; i++)
             {
-                if (!dic_lb_rri.ContainsKey(msl.list_RRI[i].timestamp.ToString(date_format) + "  rri: " + msl.list_RRI[i].rri))
-                    dic_lb_rri.Add(msl.list_RRI[i].timestamp.ToString(date_format) + "  rri: " + msl.list_RRI[i].rri, false);
+                if (!dic_log_rri.ContainsKey(msl.list_RRI[i]))
+                    dic_log_rri.Add(msl.list_RRI[i], false);
             }
 
-            for (int i = 0; i < dic_lb_acc.Count; i++)
+            for (int i = 0; i < dic_log_acc.Count; i++)
             {
-                if (dic_lb_acc.Values.ElementAt(i) == false)
+                if (dic_log_acc.Values.ElementAt(i) == false)
                 {
-                    listBox_acc_log.Items.Add(dic_lb_acc.Keys.ElementAt(i));
-                    listBox_acc_log.SelectedIndex = listBox_acc_log.Items.Count - 1;
-                    dic_lb_acc[dic_lb_acc.Keys.ElementAt(i)] = true;
+                    //set flag to true
+                    dic_log_acc[dic_log_acc.Keys.ElementAt(i)] = true;
+
+                    DataGridViewRow row = (DataGridViewRow)dgv_acc_log.Rows[0].Clone();
+                    row.Cells[0].Value = dic_log_acc.Keys.ElementAt(i).timestamp.ToString(date_format);
+                    row.Cells[1].Value = dic_log_acc.Keys.ElementAt(i).x;
+                    row.Cells[2].Value = dic_log_acc.Keys.ElementAt(i).y;
+                    row.Cells[3].Value = dic_log_acc.Keys.ElementAt(i).z;
+                    dgv_acc_log.Rows.Add(row);
+
+                    dgv_acc_log.FirstDisplayedScrollingRowIndex = dgv_acc_log.Rows.Count - 1;
                 }
             }
-            for (int i = 0; i < dic_lb_bpm.Count; i++)
+            for (int i = 0; i < dic_log_bpm.Count; i++)
             {
-                if (dic_lb_bpm.Values.ElementAt(i) == false)
+                if (dic_log_bpm.Values.ElementAt(i) == false)
                 {
-                    listBox_bpm_log.Items.Add(dic_lb_bpm.Keys.ElementAt(i));
-                    listBox_bpm_log.SelectedIndex = listBox_bpm_log.Items.Count - 1;
-                    dic_lb_bpm[dic_lb_bpm.Keys.ElementAt(i)] = true;
+                    //set flag to true
+                    dic_log_bpm[dic_log_bpm.Keys.ElementAt(i)] = true;
+
+                    DataGridViewRow row = (DataGridViewRow)dgv_bpm_log.Rows[0].Clone();
+                    row.Cells[0].Value = dic_log_bpm.Keys.ElementAt(i).timestamp.ToString(date_format);
+                    row.Cells[1].Value = dic_log_bpm.Keys.ElementAt(i).bpm;
+                    dgv_bpm_log.Rows.Add(row);
+
+                    dgv_bpm_log.FirstDisplayedScrollingRowIndex = dgv_bpm_log.Rows.Count - 1;
                 }
             }
-            for (int i = 0; i < dic_lb_rri.Count; i++)
+            for (int i = 0; i < dic_log_rri.Count; i++)
             {
-                if (dic_lb_rri.Values.ElementAt(i) == false)
+                if (dic_log_rri.Values.ElementAt(i) == false)
                 {
-                    listBox_rri_log.Items.Add(dic_lb_rri.Keys.ElementAt(i));
-                    listBox_rri_log.SelectedIndex = listBox_rri_log.Items.Count - 1;
-                    dic_lb_rri[dic_lb_rri.Keys.ElementAt(i)] = true;
+                    //set flag to true
+                    dic_log_rri[dic_log_rri.Keys.ElementAt(i)] = true;
+
+                    DataGridViewRow row = (DataGridViewRow)dgv_rri_log.Rows[0].Clone();
+                    row.Cells[0].Value = dic_log_rri.Keys.ElementAt(i).timestamp.ToString(date_format);
+                    row.Cells[1].Value = dic_log_rri.Keys.ElementAt(i).rri;
+                    dgv_rri_log.Rows.Add(row);
+
+                    dgv_rri_log.FirstDisplayedScrollingRowIndex = dgv_rri_log.Rows.Count - 1;
                 }
-            }            
+            }      
         }
 
         #endregion
@@ -1103,15 +1145,20 @@ namespace APTP_DB_flotting_project
 
         public void SetUserInfoLabel()
         {
-            label_id.Text = "ID: " + msl.list_USER[0].idx.ToString();
-            label_name.Text = "Name: " + msl.list_USER[0].name.ToString();
-            label_email.Text = "E-mail: " + msl.list_USER[0].email.ToString();
-            if (msl.list_USER[0].gender == 1)
+            int index = -1;
+            for(int i=0;i<msl.list_USER.Count;i++)
+            {
+                if (selected_user_id == msl.list_USER[i].idx)
+                    index = i;
+            }
+            label_name.Text = "Name: " + msl.list_USER[index].name.ToString();
+            label_email.Text = "E-mail: " + msl.list_USER[index].email.ToString();
+            if (msl.list_USER[index].gender == 1)
                 label_gender.Text = "Gender: Male";
             else
                 label_gender.Text = "Gender: Female";
-            label_height.Text = "Height: " + msl.list_USER[0].height.ToString();
-            label_weight.Text = "Weight: " + msl.list_USER[0].weight.ToString();
+            label_height.Text = "Height: " + msl.list_USER[index].height.ToString();
+            label_weight.Text = "Weight: " + msl.list_USER[index].weight.ToString();
         }
 
         public Boolean Refresh(NChartControl ncc)
@@ -1136,6 +1183,168 @@ namespace APTP_DB_flotting_project
         {
             PauseTimer();
         }
+
+        public void ExportExcel()
+        {
+            Microsoft.Office.Interop.Excel._Application excel = new Microsoft.Office.Interop.Excel.Application();
+            Microsoft.Office.Interop.Excel._Workbook workbook = excel.Workbooks.Add(Type.Missing);
+            Microsoft.Office.Interop.Excel._Worksheet worksheet = null;
+
+            try
+            {
+                #region save RRI data
+                worksheet = (Microsoft.Office.Interop.Excel._Worksheet)workbook.Worksheets[1];
+                worksheet.Name = "RRI_data";
+
+                int cellRowIndex = 1;
+                int cellColumnIndex = 1;
+
+                //Loop through each row and read value from each column. 
+                for (int i = 0; i < dgv_rri_log.Rows.Count - 1; i++)
+                {
+                    for (int j = 0; j < dgv_rri_log.Columns.Count; j++)
+                    {
+                        // Excel index starts from 1,1. As first Row would have the Column headers, adding a condition check. 
+                        if (cellRowIndex == 1)
+                        {
+                            worksheet.Cells[cellRowIndex, cellColumnIndex] = dgv_rri_log.Columns[j].HeaderText;
+                        }
+                        else
+                        {
+                            worksheet.Cells[cellRowIndex, cellColumnIndex] = dgv_rri_log.Rows[i].Cells[j].Value.ToString();
+                        }
+                        cellColumnIndex++;
+                    }
+                    cellColumnIndex = 1;
+                    cellRowIndex++;
+                }
+                worksheet.Columns.EntireColumn.AutoFit();
+                worksheet = (Microsoft.Office.Interop.Excel._Worksheet)workbook.Worksheets.Add();
+
+                #endregion
+                #region save BPM data
+
+                worksheet = (Microsoft.Office.Interop.Excel._Worksheet)workbook.Worksheets[1];
+                worksheet.Name = "BPM_data";
+
+                cellRowIndex = 1;
+                cellColumnIndex = 1;
+
+                //Loop through each row and read value from each column. 
+                for (int i = 0; i < dgv_bpm_log.Rows.Count - 1; i++)
+                {
+                    for (int j = 0; j < dgv_bpm_log.Columns.Count; j++)
+                    {
+                        // Excel index starts from 1,1. As first Row would have the Column headers, adding a condition check. 
+                        if (cellRowIndex == 1)
+                        {
+                            worksheet.Cells[cellRowIndex, cellColumnIndex] = dgv_bpm_log.Columns[j].HeaderText;
+                        }
+                        else
+                        {
+                            worksheet.Cells[cellRowIndex, cellColumnIndex] = dgv_bpm_log.Rows[i].Cells[j].Value.ToString();
+                        }
+                        cellColumnIndex++;
+                    }
+                    cellColumnIndex = 1;
+                    cellRowIndex++;
+                }
+                worksheet.Columns.EntireColumn.AutoFit();
+                worksheet = (Microsoft.Office.Interop.Excel._Worksheet)workbook.Worksheets.Add();
+
+                #endregion
+                #region save ACC data
+
+                worksheet = workbook.ActiveSheet;
+
+                worksheet.Name = "ACC_data";
+
+                cellRowIndex = 1;
+                cellColumnIndex = 1;
+
+                //Loop through each row and read value from each column. 
+                for (int i = 0; i < dgv_acc_log.Rows.Count - 1; i++)
+                {
+                    for (int j = 0; j < dgv_acc_log.Columns.Count; j++)
+                    {
+                        // Excel index starts from 1,1. As first Row would have the Column headers, adding a condition check. 
+                        if (cellRowIndex == 1)
+                        {
+                            worksheet.Cells[cellRowIndex, cellColumnIndex] = dgv_acc_log.Columns[j].HeaderText;
+                        }
+                        else
+                        {
+                            worksheet.Cells[cellRowIndex, cellColumnIndex] = dgv_acc_log.Rows[i].Cells[j].Value.ToString();
+                        }
+                        cellColumnIndex++;
+                    }
+                    cellColumnIndex = 1;
+                    cellRowIndex++;
+                }
+                worksheet.Columns.EntireColumn.AutoFit();
+
+                #endregion
+
+                //Getting the location and file name of the excel to save from user. 
+                SaveFileDialog saveDialog = new SaveFileDialog();
+                saveDialog.DefaultExt = "xls";
+                saveDialog.Filter = "Excel file|*.xlsx";
+                saveDialog.FilterIndex = 2;
+
+                if (saveDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    workbook.SaveAs(saveDialog.FileName);
+                    Console.WriteLine("Export Successful");
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                excel.Quit();
+                workbook = null;
+                excel = null;
+            }
+        }
+
+        public void SetcomboBox_id_Items()
+        {
+            comboBox_id.Items.Clear();
+            for(int i=0;i<msl.list_USER.Count;i++)
+            {
+                comboBox_id.Items.Add(msl.list_USER[i].idx.ToString());
+            }
+        }
+
+        private void button_excel_export_Click(object sender, EventArgs e)
+        {
+            ExportExcel();
+        }
+
+        private void comboBox_id_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selected_user_id = -1;
+            for (int i = 0; i < msl.list_USER.Count; i++)
+            {
+                if (this.comboBox_id.SelectedItem.ToString() == msl.list_USER[i].idx.ToString())
+                {
+                    selected_user_id = msl.list_USER[i].idx;
+                    SetUserInfoLabel();
+                    //init log boxes
+                    dgv_acc_log.Rows.Clear();
+                    dgv_bpm_log.Rows.Clear();
+                    dgv_rri_log.Rows.Clear();
+                    //init data list
+                    msl.list_ACC.Clear();
+                    msl.list_BPM.Clear();
+                    msl.list_RRI.Clear();
+                    break;
+                }
+            }
+        }
         #endregion
+
     }
 }
