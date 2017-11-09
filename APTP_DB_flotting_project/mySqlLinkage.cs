@@ -53,6 +53,35 @@ namespace APTP_DB_flotting_project
         }
     }
 
+    public struct GSR
+    {
+        public int user_idx;
+        public double gsr;
+        public DateTime timestamp;
+
+        public GSR(int user_dix, double gsr, DateTime timestamp)
+        {
+            this.user_idx = user_dix;
+            this.gsr = gsr;
+            this.timestamp = timestamp;
+        }
+    }
+
+    public struct STRESS
+    {
+        public int user_idx;
+        public double stress;
+        public DateTime timestamp;
+
+        public STRESS(int user_dix, double stress, DateTime timestamp)
+        {
+            this.user_idx = user_dix;
+            this.stress = stress;
+            this.timestamp = timestamp;
+        }
+    }
+
+
     public struct USER
     {
         public int idx;
@@ -83,6 +112,8 @@ namespace APTP_DB_flotting_project
         public List<ACC> list_ACC = new List<ACC>();
         public List<BPM> list_BPM = new List<BPM>();
         public List<RRI> list_RRI = new List<RRI>();
+        public List<GSR> list_GSR = new List<GSR>();
+        public List<STRESS> list_STRESS = new List<STRESS>();
         public List<USER> list_USER = new List<USER>();
 
         public void FakeDataGenerator()
@@ -245,8 +276,12 @@ namespace APTP_DB_flotting_project
                 list_ACC.Clear();
                 list_BPM.Clear();
                 list_RRI.Clear();
+                list_GSR.Clear();
+                list_STRESS.Clear();
 
                 conn.Open();
+
+
                 int acc_length;
                 string sql_ACC_LENGTH = "SELECT count(*) from ACC where user_idx = " + user_id.ToString();
                 MySqlCommand cmd_ACC_LENGTH = new MySqlCommand(sql_ACC_LENGTH, conn);
@@ -272,6 +307,7 @@ namespace APTP_DB_flotting_project
                 }
                 rdr_ACC.Close();
 
+
                 int bpm_length;
                 string sql_BPM_LENGTH = "SELECT count(*) from BPM where user_idx = " + user_id.ToString();
                 MySqlCommand cmd_BPM_LENGTH = new MySqlCommand(sql_BPM_LENGTH, conn);
@@ -295,6 +331,7 @@ namespace APTP_DB_flotting_project
                 }
                 rdr_BPM.Close();
 
+
                 int rri_length;
                 string sql_RRI_LENGTH = "SELECT count(*) from RRI where user_idx = " + user_id.ToString();
                 MySqlCommand cmd_RRI_LENGTH = new MySqlCommand(sql_RRI_LENGTH, conn);
@@ -317,6 +354,55 @@ namespace APTP_DB_flotting_project
                     list_RRI.Add(new RRI(user_idx, rri, timestamp));
                 }
                 rdr_RRI.Close();
+
+
+                int gsr_length;
+                string sql_GSR_LENGTH = "SELECT count(*) from GSR where user_idx = " + user_id.ToString();
+                MySqlCommand cmd_GSR_LENGTH = new MySqlCommand(sql_GSR_LENGTH, conn);
+                gsr_length = Convert.ToInt32(cmd_GSR_LENGTH.ExecuteScalar());
+
+                string sql_GSR;
+                if (gsr_length < 60)
+                    sql_GSR = "SELECT * FROM GSR where user_idx = " + user_id.ToString() + " LIMIT 0," + gsr_length;
+                else
+                    sql_GSR = "SELECT * FROM GSR where user_idx = " + user_id.ToString() + " LIMIT " + (gsr_length - 60) + ",60";
+
+                MySqlCommand cmd_GSR = new MySqlCommand(sql_GSR, conn);
+                MySqlDataReader rdr_GSR = cmd_GSR.ExecuteReader();
+                while (rdr_GSR.Read())
+                {
+                    int user_idx = rdr_GSR.GetInt32(rdr_GSR.GetOrdinal("user_idx"));
+                    double gsr = rdr_GSR.GetDouble(rdr_GSR.GetOrdinal("gsr"));
+                    DateTime timestamp = rdr_GSR.GetDateTime(rdr_GSR.GetOrdinal("timestamp"));
+
+                    list_GSR.Add(new GSR(user_idx, gsr, timestamp));
+                }
+                rdr_GSR.Close();
+
+                // ******************************* stress는 table 값 명에 따라 수정 필요
+                int stress_length;
+                string sql_stress_LENGTH = "SELECT count(*) from stress where user_idx = " + user_id.ToString();
+                MySqlCommand cmd_stress_LENGTH = new MySqlCommand(sql_stress_LENGTH, conn);
+                stress_length = Convert.ToInt32(cmd_stress_LENGTH.ExecuteScalar());
+
+                string sql_stress;
+                if (stress_length < 60)
+                    sql_stress = "SELECT * FROM stress where user_idx = " + user_id.ToString() + " LIMIT 0," + stress_length;
+                else
+                    sql_stress = "SELECT * FROM stress where user_idx = " + user_id.ToString() + " LIMIT " + (stress_length - 60) + ",60";
+
+                MySqlCommand cmd_stress = new MySqlCommand(sql_stress, conn);
+                MySqlDataReader rdr_stress = cmd_stress.ExecuteReader();
+                while (rdr_stress.Read())
+                {
+                    int user_idx = rdr_stress.GetInt32(rdr_stress.GetOrdinal("user_idx"));
+                    double stress = rdr_stress.GetDouble(rdr_stress.GetOrdinal("stress"));
+                    DateTime timestamp = rdr_stress.GetDateTime(rdr_stress.GetOrdinal("timestamp"));
+
+                    list_STRESS.Add(new STRESS(user_idx, stress, timestamp));
+                }
+                rdr_stress.Close();
+
             }
         }
 
@@ -422,12 +508,33 @@ namespace APTP_DB_flotting_project
                         list_RRI.Add(new RRI(user_idx, rri, time));
                     }
                 }
+
+                //GSR data
+                {
+                    for (DateTime time = cur_time.AddSeconds(-60); time < cur_time; time = time.AddSeconds(1))
+                    {
+                        int user_idx = given_idx;
+                        double gsr = r.NextDouble();
+                        list_GSR.Add(new GSR(user_idx, gsr, time));
+                    }
+                }
+
+                {
+                    for (DateTime time = cur_time.AddSeconds(-60); time < cur_time; time = time.AddSeconds(1))
+                    {
+                        int user_idx = given_idx;
+                        double stress = r.NextDouble();
+                        list_STRESS.Add(new STRESS(user_idx, stress, time));
+                    }
+                }
             }
             else
             {
                 list_ACC.RemoveAt(0);
                 list_BPM.RemoveAt(0);
                 list_RRI.RemoveAt(0);
+                list_GSR.RemoveAt(0);
+                list_STRESS.RemoveAt(0);
 
                 Random r = new Random();
                 DateTime cur_time = DateTime.Now;
@@ -443,6 +550,12 @@ namespace APTP_DB_flotting_project
 
                 double rri = r.NextDouble();
                 list_RRI.Add(new RRI(user_idx, rri, cur_time));
+
+                double gsr = r.NextDouble();
+                list_GSR.Add(new GSR(user_idx, gsr, cur_time));
+
+                double stress = r.NextDouble();
+                list_STRESS.Add(new STRESS(user_idx, stress, cur_time));
             }
         }        
     }

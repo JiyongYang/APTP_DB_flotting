@@ -27,16 +27,25 @@ namespace APTP_DB_flotting_project
         public double[][] rri_w_matrix;
         int[] bpm_w_matrix;
         int[] bpm_m_matrix;
+        double[] gsr_w_matrix;
+        double[] gsr_m_matrix;
+        double[] stress_w_matrix;
+        double[] stress_m_matrix;
 
         NLineSeries m_BPMLine;
-        int m_MaxCount = 60;
-        int m_NewDataPointsPerTick = 60;
+        NLineSeries m_GSRLine;
+        NLineSeries m_StressLine;
+        int m_BpmMaxCount = 60;
+        int m_GsrMaxCount = 60;
+        int m_StressMaxCount = 60;
         public Color[] m_ColorTable;
         public int day_flag;
         public Dictionary<string, string> day_stack;
         public Dictionary<ACC, bool> dic_log_acc;
         public Dictionary<BPM, bool> dic_log_bpm;
         public Dictionary<RRI, bool> dic_log_rri;
+        public Dictionary<GSR, bool> dic_log_gsr;
+        public Dictionary<STRESS, bool> dic_log_stress;
         public int sec_flag;
         public string date_format;
 
@@ -46,7 +55,7 @@ namespace APTP_DB_flotting_project
         {
             InitializeComponent();
         }
-        
+
         public Visualizer(mySqlLinkage _msl)
         {
             NLicense license = new NLicense("0619cf66-9900-d103-7d02-2d6f5900b739");
@@ -55,7 +64,7 @@ namespace APTP_DB_flotting_project
             msl = _msl;
 
             InitializeComponent();
-            
+
             //non real time
             //NonRealtimeInitialize();
 
@@ -224,7 +233,7 @@ namespace APTP_DB_flotting_project
                 bar.BorderStyle.Width = new NLength(0);
             }
         }
-        
+
         public void UpdateBarACC()
         {
             // clear the list
@@ -364,7 +373,7 @@ namespace APTP_DB_flotting_project
             surface.SmoothPalette = true;
             surface.CellTriangulationMode = SurfaceCellTriangulationMode.MaxSum;
             surface.Data.SetGridSize(60, 10);
-            
+
             // apply layout
             ConfigureStandardLayout(ncc_rri, chart, title, null);
 
@@ -401,7 +410,7 @@ namespace APTP_DB_flotting_project
                     rri_m_matrix[i][j] = 0;
                 }
             }
-            for(int i=0;i<10;i++)
+            for (int i = 0; i < 10; i++)
             {
                 for (int j = 0; j < 60; j++)
                 {
@@ -413,11 +422,11 @@ namespace APTP_DB_flotting_project
             }
 
             NGridSurfaceSeries surface = (NGridSurfaceSeries)ncc_rri.Charts[0].Series[0];
-            
 
-            for(int i=0;i<10;i++)
+
+            for (int i = 0; i < 10; i++)
             {
-                for(int j=0;j< 60;j++)
+                for (int j = 0; j < 60; j++)
                 {
                     surface.Data.SetValue(j, i, rri_m_matrix[i][j]);
                 }
@@ -444,20 +453,20 @@ namespace APTP_DB_flotting_project
                 {
                     int k = msl.list_RRI[j].timestamp.Hour * 60 * 60 + msl.list_RRI[j].timestamp.Minute * 60 + msl.list_RRI[j].timestamp.Second;
                     rri_w_matrix[0][k] = msl.list_RRI[j].rri;
-                    for (int i=1;i<10;i++)
+                    for (int i = 1; i < 10; i++)
                     {
-                        rri_w_matrix[i][k] = msl.list_RRI[j].rri + r.NextDouble()/10.0;
+                        rri_w_matrix[i][k] = msl.list_RRI[j].rri + r.NextDouble() / 10.0;
                     }
                 }
             }
         }
-        
-        private void ConfigureAxis(NAxis axis, float beginPercent, float endPercent, string title)
+
+        private void ConfigureAxis(NAxis axis, float beginPercent, float endPercent, string title, int r1, int r2)
         {
             NLinearScaleConfigurator scale = new NLinearScaleConfigurator();
             scale.MajorGridStyle.SetShowAtWall(ChartWallType.Back, true);
             axis.ScaleConfigurator = scale;
-            axis.View = new NRangeAxisView(new NRange1DD(50, 110), true, true);
+            axis.View = new NRangeAxisView(new NRange1DD(r1, r2), true, true);
             axis.ScaleConfigurator.Title.Text = title;
             axis.Anchor = new NDockAxisAnchor(AxisDockZone.FrontLeft, false);
             axis.Anchor.BeginPercent = beginPercent;
@@ -465,12 +474,12 @@ namespace APTP_DB_flotting_project
             axis.Visible = true;
         }
 
-        private NLineSeries CreateLineSeries()
+        private NLineSeries CreateLineSeries(int capacity)
         {
             NLineSeries lineSeries = new NLineSeries();
 
-            lineSeries.Values.Capacity = m_MaxCount;
-            lineSeries.XValues.Capacity = m_MaxCount;
+            lineSeries.Values.Capacity = capacity;
+            lineSeries.XValues.Capacity = capacity;
             lineSeries.DataLabelStyle.Visible = false;
             lineSeries.SamplingMode = SeriesSamplingMode.Enabled;
             lineSeries.SampleDistance = new NLength(1, NGraphicsUnit.Pixel);
@@ -499,9 +508,9 @@ namespace APTP_DB_flotting_project
             chart.BoundsMode = BoundsMode.Stretch;
 
             NAxis axis1 = chart.Axis(StandardAxis.PrimaryY);
-            ConfigureAxis(axis1, 0, 100, "Time");
+            ConfigureAxis(axis1, 0, 100, "Time", 60, 120);
 
-            m_BPMLine = CreateLineSeries();
+            m_BPMLine = CreateLineSeries(m_BpmMaxCount);
             chart.Series.Add(m_BPMLine);
 
 
@@ -514,8 +523,6 @@ namespace APTP_DB_flotting_project
 
         public void UpdateLineBPM()
         {
-            int newDataPoints = m_NewDataPointsPerTick;
-
             // clear the list
             for (int i = 0; i < bpm_m_matrix.Length; i++)
             {
@@ -638,7 +645,7 @@ namespace APTP_DB_flotting_project
             //    {
             //        //error
             //    }
-                
+
             //    if (sec_flag + 59 <= 24 * 60 * 60)
             //    {
             //        date = day_stack.FirstOrDefault(x => x.Value == day_flag.ToString()).Key;
@@ -674,6 +681,8 @@ namespace APTP_DB_flotting_project
             dic_log_acc = new Dictionary<ACC, bool>();
             dic_log_bpm = new Dictionary<BPM, bool>();
             dic_log_rri = new Dictionary<RRI, bool>();
+            dic_log_gsr = new Dictionary<GSR, bool>();
+            dic_log_stress = new Dictionary<STRESS, bool>();
 
             date_format = "yyyyMMdd HH:mm:ss";
             m_ColorTable = new Color[256];
@@ -682,24 +691,29 @@ namespace APTP_DB_flotting_project
                 m_ColorTable[i] = InterpolateColors(Color.Blue, Color.Red, i / 255.0f);
             }
             //fake data
-            //this.msl.Realtime_FakeUserInfoGenerator();
+            this.msl.Realtime_FakeUserInfoGenerator();
             //real data
-            this.msl.Realtime_SelectUserInfoUsingReader();
+            //this.msl.Realtime_SelectUserInfoUsingReader();
             SetcomboBox_id_Items();
             selected_user_id = -1;
+            this.Realtime_InitializeBarACC();
+            this.Realtime_InitializeSurfaceRRI();
+            this.Realtime_InitializeBPMGraph();
+            this.Realtime_InitializeGSR();
         }
 
         public void Realtime_OnTimerTick(object sender, EventArgs e)
         {
             //real data
-            this.msl.Realtime_SelectUsingReader(selected_user_id);
+            //this.msl.Realtime_SelectUsingReader(selected_user_id);
 
             //fake data
-            //this.msl.Realtime_FakeDataGenerator(selected_user_id);
+            this.msl.Realtime_FakeDataGenerator(selected_user_id);
 
             Realtime_UpdateBarACC();
             Realtime_UpdateLineBPM();
             Realtime_UpdateSurfaceRRI();
+            Realtime_UpdateLineGSR();
 
             Realtime_SetTimerLabel();
             Realtime_SetLogTextBoxes();
@@ -707,6 +721,7 @@ namespace APTP_DB_flotting_project
             this.Refresh(ncc_acc);
             this.Refresh(ncc_rri);
             this.Refresh(ncc_bpm);
+            this.Refresh(ncc_gsr);
         }
 
         public void Realtime_InitializeBarACC()
@@ -851,14 +866,14 @@ namespace APTP_DB_flotting_project
             surface.Data.SetGridSize(60, 10);
 
             // apply layout
-            ConfigureStandardLayout(ncc_rri, chart, title, null);            
+            ConfigureStandardLayout(ncc_rri, chart, title, null);
         }
 
         private void Realtime_InitializeBPMGraph()
         {
             ncc_bpm.Clear();
             ncc_bpm.Legends.Clear();
-            
+
             // Set a chart title
             NLabel title = ncc_bpm.Labels.AddHeader("BPM Line chart");
             title.TextStyle.FontStyle = new NFontStyle("Times New Roman", 18, FontStyle.Italic);
@@ -871,13 +886,13 @@ namespace APTP_DB_flotting_project
             chart.BoundsMode = BoundsMode.Stretch;
 
             NAxis axis1 = chart.Axis(StandardAxis.PrimaryY);
-            ConfigureAxis(axis1, 0, 100, "Time");
+            ConfigureAxis(axis1, 0, 100, "Time", 60, 120);
 
             chart.Series.Clear();
 
-            m_BPMLine = CreateLineSeries();
+            m_BPMLine = CreateLineSeries(m_BpmMaxCount);
             chart.Series.Add(m_BPMLine);
-            
+
             //bpm_w_matrix = new double[m_NewDataPointsPerTick];
 
             ConfigureStandardLayout(ncc_bpm, chart, title, null);
@@ -885,15 +900,45 @@ namespace APTP_DB_flotting_project
             ncc_bpm.Settings.RenderSurface = RenderSurface.Window;
         }
 
+        private void Realtime_InitializeGSR()
+        {
+            ncc_gsr.Clear();
+            ncc_gsr.Legends.Clear();
+
+            // Set a chart title
+            NLabel title = ncc_gsr.Labels.AddHeader("GSR Line chart");
+            title.TextStyle.FontStyle = new NFontStyle("Times New Roman", 18, FontStyle.Italic);
+            title.ContentAlignment = ContentAlignment.BottomCenter;
+            title.Location = new NPointL(new NLength(50, NRelativeUnit.ParentPercentage), new NLength(2, NRelativeUnit.ParentPercentage));
+
+            // Setup Chart
+            NCartesianChart chart = new NCartesianChart();
+            ncc_gsr.Panels.Add(chart);
+            chart.BoundsMode = BoundsMode.Stretch;
+
+            NAxis axis1 = chart.Axis(StandardAxis.PrimaryY);
+            ConfigureAxis(axis1, 0, 100, "Time", 0, 1);
+
+            chart.Series.Clear();
+
+            m_GSRLine = CreateLineSeries(m_GsrMaxCount);
+            chart.Series.Add(m_GSRLine);
+
+            //bpm_w_matrix = new double[m_NewDataPointsPerTick];
+
+            ConfigureStandardLayout(ncc_gsr, chart, title, null);
+
+            ncc_gsr.Settings.RenderSurface = RenderSurface.Window;
+        }
+
         public void Realtime_UpdateBarACC()
         {
-            this.Realtime_InitializeBarACC();
             double[][] data = new double[3][];
             data[0] = new double[60];
             data[1] = new double[60];
             data[2] = new double[60];
 
-            for (int i=0;i<msl.list_ACC.Count;i++)
+            for (int i = 0; i < msl.list_ACC.Count; i++)
             {
                 data[0][i] = msl.list_ACC[i].x;
                 data[1][i] = msl.list_ACC[i].y;
@@ -929,6 +974,8 @@ namespace APTP_DB_flotting_project
                     else if (color_var < 0)
                         color_var = 0;
 
+
+
                     if (j >= fillStyleCount)
                     {
                         //bar.FillStyles[j] = new NColorFillStyle(m_ColorTable[(int)barValues[j]]);
@@ -952,7 +999,6 @@ namespace APTP_DB_flotting_project
         public void Realtime_UpdateSurfaceRRI()
         {
             Random r = new Random();
-            this.Realtime_InitializeSurfaceRRI();
 
             double[][] data = new double[10][];
             for (int i = 0; i < 10; i++)
@@ -966,7 +1012,7 @@ namespace APTP_DB_flotting_project
             }
 
             NGridSurfaceSeries surface = (NGridSurfaceSeries)ncc_rri.Charts[0].Series[0];
-            
+
             for (int i = 0; i < 10; i++)
             {
                 for (int j = 0; j < 60; j++)
@@ -978,11 +1024,10 @@ namespace APTP_DB_flotting_project
 
         public void Realtime_UpdateLineBPM()
         {
-            this.Realtime_InitializeBPMGraph();
 
             double[] data = new double[60];
 
-            for(int i=0;i<msl.list_BPM.Count;i++)
+            for (int i = 0; i < msl.list_BPM.Count; i++)
             {
                 data[i] = msl.list_BPM[i].bpm;
             }
@@ -997,9 +1042,29 @@ namespace APTP_DB_flotting_project
             }
         }
 
+        public void Realtime_UpdateLineGSR()
+        {
+
+            double[] data = new double[60];
+
+            for (int i = 0; i < msl.list_GSR.Count; i++)
+            {
+                data[i] = msl.list_GSR[i].gsr;
+            }
+
+            if (m_GSRLine.Values.Count == 0)
+            {
+                m_GSRLine.Values.AddRange(data);
+            }
+            else
+            {
+                m_GSRLine.Values.SetRange(0, data);
+            }
+        }
+
         public void Realtime_SetTimerLabel()
         {
-            label_time.Text = msl.list_ACC[0].timestamp.ToString(date_format) + " ~ " + msl.list_ACC[msl.list_ACC.Count-1].timestamp.ToString(date_format);
+            label_time.Text = msl.list_ACC[0].timestamp.ToString(date_format) + " ~ " + msl.list_ACC[msl.list_ACC.Count - 1].timestamp.ToString(date_format);
         }
 
         public void Realtime_SetLogTextBoxes()
@@ -1018,6 +1083,16 @@ namespace APTP_DB_flotting_project
             {
                 if (!dic_log_rri.ContainsKey(msl.list_RRI[i]))
                     dic_log_rri.Add(msl.list_RRI[i], false);
+            }
+            for (int i = 0; i < msl.list_GSR.Count; i++)
+            {
+                if (!dic_log_gsr.ContainsKey(msl.list_GSR[i]))
+                    dic_log_gsr.Add(msl.list_GSR[i], false);
+            }
+            for (int i = 0; i < msl.list_STRESS.Count; i++)
+            {
+                if (!dic_log_stress.ContainsKey(msl.list_STRESS[i]))
+                    dic_log_stress.Add(msl.list_STRESS[i], false);
             }
 
             for (int i = 0; i < dic_log_acc.Count; i++)
@@ -1066,7 +1141,37 @@ namespace APTP_DB_flotting_project
 
                     dgv_rri_log.FirstDisplayedScrollingRowIndex = dgv_rri_log.Rows.Count - 1;
                 }
-            }      
+            }
+            for (int i = 0; i < dic_log_gsr.Count; i++)
+            {
+                if (dic_log_gsr.Values.ElementAt(i) == false)
+                {
+                    //set flag to true
+                    dic_log_gsr[dic_log_gsr.Keys.ElementAt(i)] = true;
+
+                    DataGridViewRow row = (DataGridViewRow)dgv_gsr_log.Rows[0].Clone();
+                    row.Cells[0].Value = dic_log_gsr.Keys.ElementAt(i).timestamp.ToString(date_format);
+                    row.Cells[1].Value = dic_log_gsr.Keys.ElementAt(i).gsr;
+                    dgv_gsr_log.Rows.Add(row);
+
+                    dgv_gsr_log.FirstDisplayedScrollingRowIndex = dgv_gsr_log.Rows.Count - 1;
+                }
+            }
+            for (int i = 0; i < dic_log_stress.Count; i++)
+            {
+                if (dic_log_stress.Values.ElementAt(i) == false)
+                {
+                    //set flag to true
+                    dic_log_stress[dic_log_stress.Keys.ElementAt(i)] = true;
+
+                    DataGridViewRow row = (DataGridViewRow)dgv_stress_log.Rows[0].Clone();
+                    row.Cells[0].Value = dic_log_stress.Keys.ElementAt(i).timestamp.ToString(date_format);
+                    row.Cells[1].Value = dic_log_stress.Keys.ElementAt(i).stress;
+                    dgv_stress_log.Rows.Add(row);
+
+                    dgv_stress_log.FirstDisplayedScrollingRowIndex = dgv_stress_log.Rows.Count - 1;
+                }
+            }
         }
 
         #endregion
@@ -1150,7 +1255,7 @@ namespace APTP_DB_flotting_project
         public void SetUserInfoLabel()
         {
             int index = -1;
-            for(int i=0;i<msl.list_USER.Count;i++)
+            for (int i = 0; i < msl.list_USER.Count; i++)
             {
                 if (selected_user_id == msl.list_USER[i].idx)
                     index = i;
@@ -1196,12 +1301,72 @@ namespace APTP_DB_flotting_project
 
             try
             {
+                #region save STRESS data
+                worksheet = (Microsoft.Office.Interop.Excel._Worksheet)workbook.Worksheets[1];
+                worksheet.Name = "STRESS_data";
+
+                int cellRowIndex = 1;
+                int cellColumnIndex = 1;
+
+                //Loop through each row and read value from each column. 
+                for (int i = 0; i < dgv_stress_log.Rows.Count - 1; i++)
+                {
+                    for (int j = 0; j < dgv_stress_log.Columns.Count; j++)
+                    {
+                        // Excel index starts from 1,1. As first Row would have the Column headers, adding a condition check. 
+                        if (cellRowIndex == 1)
+                        {
+                            worksheet.Cells[cellRowIndex, cellColumnIndex] = dgv_stress_log.Columns[j].HeaderText;
+                        }
+                        else
+                        {
+                            worksheet.Cells[cellRowIndex, cellColumnIndex] = dgv_stress_log.Rows[i].Cells[j].Value.ToString();
+                        }
+                        cellColumnIndex++;
+                    }
+                    cellColumnIndex = 1;
+                    cellRowIndex++;
+                }
+                worksheet.Columns.EntireColumn.AutoFit();
+                worksheet = (Microsoft.Office.Interop.Excel._Worksheet)workbook.Worksheets.Add();
+
+                #endregion
+                #region save GSR data
+                worksheet = (Microsoft.Office.Interop.Excel._Worksheet)workbook.Worksheets[1];
+                worksheet.Name = "GSR_data";
+
+                cellRowIndex = 1;
+                cellColumnIndex = 1;
+
+                //Loop through each row and read value from each column. 
+                for (int i = 0; i < dgv_gsr_log.Rows.Count - 1; i++)
+                {
+                    for (int j = 0; j < dgv_gsr_log.Columns.Count; j++)
+                    {
+                        // Excel index starts from 1,1. As first Row would have the Column headers, adding a condition check. 
+                        if (cellRowIndex == 1)
+                        {
+                            worksheet.Cells[cellRowIndex, cellColumnIndex] = dgv_gsr_log.Columns[j].HeaderText;
+                        }
+                        else
+                        {
+                            worksheet.Cells[cellRowIndex, cellColumnIndex] = dgv_gsr_log.Rows[i].Cells[j].Value.ToString();
+                        }
+                        cellColumnIndex++;
+                    }
+                    cellColumnIndex = 1;
+                    cellRowIndex++;
+                }
+                worksheet.Columns.EntireColumn.AutoFit();
+                worksheet = (Microsoft.Office.Interop.Excel._Worksheet)workbook.Worksheets.Add();
+
+                #endregion
                 #region save RRI data
                 worksheet = (Microsoft.Office.Interop.Excel._Worksheet)workbook.Worksheets[1];
                 worksheet.Name = "RRI_data";
 
-                int cellRowIndex = 1;
-                int cellColumnIndex = 1;
+                cellRowIndex = 1;
+                cellColumnIndex = 1;
 
                 //Loop through each row and read value from each column. 
                 for (int i = 0; i < dgv_rri_log.Rows.Count - 1; i++)
@@ -1316,7 +1481,7 @@ namespace APTP_DB_flotting_project
         public void SetcomboBox_id_Items()
         {
             comboBox_id.Items.Clear();
-            for(int i=0;i<msl.list_USER.Count;i++)
+            for (int i = 0; i < msl.list_USER.Count; i++)
             {
                 comboBox_id.Items.Add(msl.list_USER[i].idx.ToString());
             }
@@ -1340,15 +1505,34 @@ namespace APTP_DB_flotting_project
                     dgv_acc_log.Rows.Clear();
                     dgv_bpm_log.Rows.Clear();
                     dgv_rri_log.Rows.Clear();
+                    dgv_gsr_log.Rows.Clear();
+                    dgv_stress_log.Rows.Clear();
                     //init data list
                     msl.list_ACC.Clear();
                     msl.list_BPM.Clear();
                     msl.list_RRI.Clear();
+                    msl.list_GSR.Clear();
+                    msl.list_STRESS.Clear();
                     break;
                 }
             }
         }
         #endregion
 
+        private void label_timeinfo_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Visualizer_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
     }
+
 }
