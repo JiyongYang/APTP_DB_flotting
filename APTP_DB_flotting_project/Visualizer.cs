@@ -65,7 +65,6 @@ namespace APTP_DB_flotting_project
             RealtimeInitialize();
         }
 
-
         #region Realtime APIs
         public void RealtimeInitialize()
         {
@@ -180,7 +179,12 @@ namespace APTP_DB_flotting_project
             linearScale.InnerMajorTickStyle.Visible = false;
 
             chart.Axis(StandardAxis.Depth).Visible = false;
-
+            
+            // view point
+            NProjection projection = ncc_acc.Charts[0].Projection;
+            projection.Elevation = 22;
+            projection.Rotation = -13;
+            
             // apply layout
             ConfigureStandardLayout(ncc_acc, chart, title, null);
 
@@ -276,6 +280,7 @@ namespace APTP_DB_flotting_project
             title.ContentAlignment = ContentAlignment.BottomCenter;
             title.Location = new NPointL(new NLength(50, NRelativeUnit.ParentPercentage), new NLength(2, NRelativeUnit.ParentPercentage));
 
+            
             // Setup Chart
             NCartesianChart chart = new NCartesianChart();
             ncc_rri.Panels.Add(chart);
@@ -285,6 +290,12 @@ namespace APTP_DB_flotting_project
             ConfigureAxis(axis1, 0, 100, "RRI", -1, 2);
 
             chart.Series.Clear();
+
+            NScaleStripStyle stripStyle = new NScaleStripStyle(new NColorFillStyle(Color.LightGray), null, true, 0, 0, 1, 1);
+            stripStyle.SetShowAtWall(ChartWallType.Back, true);
+            stripStyle.SetShowAtWall(ChartWallType.Left, true);
+            stripStyle.Interlaced = true;
+            ((NStandardScaleConfigurator)chart.Axis(StandardAxis.PrimaryY).ScaleConfigurator).StripStyles.Add(stripStyle);
 
             m_RRILine = CreateLineSeries(m_RriMaxCount);
             chart.Series.Add(m_RRILine);
@@ -317,6 +328,12 @@ namespace APTP_DB_flotting_project
 
             chart.Series.Clear();
 
+            NScaleStripStyle stripStyle = new NScaleStripStyle(new NColorFillStyle(Color.LightGray), null, true, 0, 0, 1, 1);
+            stripStyle.SetShowAtWall(ChartWallType.Back, true);
+            stripStyle.SetShowAtWall(ChartWallType.Left, true);
+            stripStyle.Interlaced = true;
+            ((NStandardScaleConfigurator)chart.Axis(StandardAxis.PrimaryY).ScaleConfigurator).StripStyles.Add(stripStyle);
+
             m_BPMLine = CreateLineSeries(m_BpmMaxCount);
             chart.Series.Add(m_BPMLine);
 
@@ -347,6 +364,12 @@ namespace APTP_DB_flotting_project
             ConfigureAxis(axis1, 0, 100, "GSR", -1, 2);
 
             chart.Series.Clear();
+
+            NScaleStripStyle stripStyle = new NScaleStripStyle(new NColorFillStyle(Color.LightGray), null, true, 0, 0, 1, 1);
+            stripStyle.SetShowAtWall(ChartWallType.Back, true);
+            stripStyle.SetShowAtWall(ChartWallType.Left, true);
+            stripStyle.Interlaced = true;
+            ((NStandardScaleConfigurator)chart.Axis(StandardAxis.PrimaryY).ScaleConfigurator).StripStyles.Add(stripStyle);
 
             m_GSRLine = CreateLineSeries(m_GsrMaxCount);
             chart.Series.Add(m_GSRLine);
@@ -379,6 +402,12 @@ namespace APTP_DB_flotting_project
 
             chart.Series.Clear();
 
+            NScaleStripStyle stripStyle = new NScaleStripStyle(new NColorFillStyle(Color.LightGray), null, true, 0, 0, 1, 1);
+            stripStyle.SetShowAtWall(ChartWallType.Back, true);
+            stripStyle.SetShowAtWall(ChartWallType.Left, true);
+            stripStyle.Interlaced = true;
+            ((NStandardScaleConfigurator)chart.Axis(StandardAxis.PrimaryY).ScaleConfigurator).StripStyles.Add(stripStyle);
+
             m_STRESSLine = CreateLineSeries(m_StressMaxCount);
             chart.Series.Add(m_STRESSLine);
 
@@ -390,7 +419,7 @@ namespace APTP_DB_flotting_project
         }
 
         public void Realtime_UpdateBarACC()
-        {
+        {   
             double[][] data = new double[3][];
             data[0] = new double[60];
             data[1] = new double[60];
@@ -518,6 +547,10 @@ namespace APTP_DB_flotting_project
             {
                 m_BPMLine.Values.SetRange(0, data);
             }
+
+            m_BPMLine.InflateMargins = true;
+            m_BPMLine.BorderStyle = new NStrokeStyle(Color.DarkBlue);
+
         }
 
         public void Realtime_UpdateLineGSR()
