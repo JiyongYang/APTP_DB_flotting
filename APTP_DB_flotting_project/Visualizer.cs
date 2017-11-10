@@ -291,7 +291,7 @@ namespace APTP_DB_flotting_project
 
             chart.Series.Clear();
 
-            NScaleStripStyle stripStyle = new NScaleStripStyle(new NColorFillStyle(Color.LightGray), null, true, 0, 0, 1, 1);
+            NScaleStripStyle stripStyle = new NScaleStripStyle(new NColorFillStyle(Color.WhiteSmoke), null, true, 0, 0, 1, 1);
             stripStyle.SetShowAtWall(ChartWallType.Back, true);
             stripStyle.SetShowAtWall(ChartWallType.Left, true);
             stripStyle.Interlaced = true;
@@ -328,7 +328,7 @@ namespace APTP_DB_flotting_project
 
             chart.Series.Clear();
 
-            NScaleStripStyle stripStyle = new NScaleStripStyle(new NColorFillStyle(Color.LightGray), null, true, 0, 0, 1, 1);
+            NScaleStripStyle stripStyle = new NScaleStripStyle(new NColorFillStyle(Color.WhiteSmoke), null, true, 0, 0, 1, 1);
             stripStyle.SetShowAtWall(ChartWallType.Back, true);
             stripStyle.SetShowAtWall(ChartWallType.Left, true);
             stripStyle.Interlaced = true;
@@ -365,7 +365,7 @@ namespace APTP_DB_flotting_project
 
             chart.Series.Clear();
 
-            NScaleStripStyle stripStyle = new NScaleStripStyle(new NColorFillStyle(Color.LightGray), null, true, 0, 0, 1, 1);
+            NScaleStripStyle stripStyle = new NScaleStripStyle(new NColorFillStyle(Color.WhiteSmoke), null, true, 0, 0, 1, 1);
             stripStyle.SetShowAtWall(ChartWallType.Back, true);
             stripStyle.SetShowAtWall(ChartWallType.Left, true);
             stripStyle.Interlaced = true;
@@ -402,7 +402,7 @@ namespace APTP_DB_flotting_project
 
             chart.Series.Clear();
 
-            NScaleStripStyle stripStyle = new NScaleStripStyle(new NColorFillStyle(Color.LightGray), null, true, 0, 0, 1, 1);
+            NScaleStripStyle stripStyle = new NScaleStripStyle(new NColorFillStyle(Color.WhiteSmoke), null, true, 0, 0, 1, 1);
             stripStyle.SetShowAtWall(ChartWallType.Back, true);
             stripStyle.SetShowAtWall(ChartWallType.Left, true);
             stripStyle.Interlaced = true;
@@ -527,6 +527,9 @@ namespace APTP_DB_flotting_project
             {
                 m_RRILine.Values.SetRange(0, data);
             }
+
+            m_RRILine.InflateMargins = true;
+            m_RRILine.BorderStyle = new NStrokeStyle(Color.FromArgb(255, 108, 112, 115));
         }
 
         public void Realtime_UpdateLineBPM()
@@ -549,7 +552,7 @@ namespace APTP_DB_flotting_project
             }
 
             m_BPMLine.InflateMargins = true;
-            m_BPMLine.BorderStyle = new NStrokeStyle(Color.DarkBlue);
+            m_BPMLine.BorderStyle = new NStrokeStyle(Color.FromArgb(255, 207, 68, 61));
 
         }
 
@@ -571,6 +574,9 @@ namespace APTP_DB_flotting_project
             {
                 m_GSRLine.Values.SetRange(0, data);
             }
+
+            m_GSRLine.InflateMargins = true;
+            m_GSRLine.BorderStyle = new NStrokeStyle(Color.FromArgb(255, 121, 177, 166));
         }
 
         public void Realtime_UpdateLineSTRESS()
