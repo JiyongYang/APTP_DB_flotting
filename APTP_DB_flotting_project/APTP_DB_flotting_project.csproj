@@ -89,6 +89,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Nevron Software\Nevron .NET Vision 2017.1 for VS2017\Bin\Nevron.UI.WinForm.Skins.dll</HintPath>
     </Reference>
+    <Reference Include="ShellBrowser, Version=5.4.0.175, Culture=neutral, PublicKeyToken=54688575bb3fe70e, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -102,11 +103,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Visualizer.cs">
+    <Compile Include="APTP_Application.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Visualizer.Designer.cs">
-      <DependentUpon>Visualizer.cs</DependentUpon>
+    <Compile Include="APTP_Application.Designer.cs">
+      <DependentUpon>APTP_Application.cs</DependentUpon>
     </Compile>
     <Compile Include="mySqlLinkage.cs" />
     <Compile Include="Program.cs" />
@@ -121,8 +122,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Visualizer.resx">
-      <DependentUpon>Visualizer.cs</DependentUpon>
+    <EmbeddedResource Include="APTP_Application.resx">
+      <DependentUpon>APTP_Application.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -14,12 +14,34 @@ using Nevron.Chart.Windows;
 using Nevron.GraphicsCore;
 using Nevron.Dom;
 using Nevron.Editors;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 
 namespace APTP_DB_flotting_project
 {
-    public partial class Visualizer : Form
+    public partial class APTP_Application : Form
     {
+        [DllImport("omiPlayer.dll")]
+        static extern void Play(string someStr);
+
+        [DllImport("omiPlayer.dll")]
+        static extern void Stop();
+        
+        private void shellListView1_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
+        {
+            MessageBox.Show(e.ToString());
+        }
+
+        private void shellListView1_BeforeShellCommand(object sender, Jam.Shell.BeforeShellCommandEventArgs e)
+        {
+            MessageBox.Show(e.Paths.ToString());
+            Stop();
+            Thread.Sleep(1000);
+            Play(e.Paths.ToString());
+            e.ExecuteShellCommand = false;
+        }
+        
         private mySqlLinkage msl;
 
         NLineSeries m_RRILine;
@@ -44,12 +66,12 @@ namespace APTP_DB_flotting_project
 
         public int selected_user_id;
 
-        public Visualizer()
+        public APTP_Application()
         {
             InitializeComponent();
         }
 
-        public Visualizer(mySqlLinkage _msl)
+        public APTP_Application(mySqlLinkage _msl)
         {
             NLicense license = new NLicense("0619cf66-9900-d103-7d02-2d6f5900b739");
             NLicenseManager.Instance.SetLicense(license);
@@ -1081,21 +1103,7 @@ namespace APTP_DB_flotting_project
             }
         }
         #endregion
-
-        private void label_timeinfo_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Visualizer_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label8_Click(object sender, EventArgs e)
-        {
-
-        }
+        
     }
 
 }

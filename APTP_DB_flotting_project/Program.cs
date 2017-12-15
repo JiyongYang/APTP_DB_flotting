@@ -18,7 +18,7 @@ namespace APTP_DB_flotting_project
             mySqlLinkage _mySqlLinkage = new mySqlLinkage();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Visualizer form = new Visualizer(_mySqlLinkage);
+            APTP_Application form = new APTP_Application(_mySqlLinkage);
             Application.Run(form);
         }
 

@@ -117,4 +117,87 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="dataGridViewTextBoxColumn3.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="dataGridViewTextBoxColumn4.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="dataGridViewTextBoxColumn1.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="dataGridViewTextBoxColumn2.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="ncc_gsr.State" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFpOZXZyb24uQ2hhcnQuV2luRm9ybSwgVmVyc2lvbj0xNy4xMC41
+        LjEyLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWM5YmQ4OTk4ZTk4MWU0ZWUFAQAAABtO
+        ZXZyb24uQ2hhcnQuV2luRm9ybS5OU3RhdGUBAAAAB21fQnl0ZXMHAgIAAAAKCw==
+</value>
+  </data>
+  <metadata name="col_rri_time.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="col_rri.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="col_bpm_time.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="col_bpm.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="ncc_stress.State" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFpOZXZyb24uQ2hhcnQuV2luRm9ybSwgVmVyc2lvbj0xNy4xMC41
+        LjEyLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWM5YmQ4OTk4ZTk4MWU0ZWUFAQAAABtO
+        ZXZyb24uQ2hhcnQuV2luRm9ybS5OU3RhdGUBAAAAB21fQnl0ZXMHAgIAAAAKCw==
+</value>
+  </data>
+  <metadata name="col_acc_time.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="col_acc_x.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="col_acc_y.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="col_acc_z.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="ncc_rri.State" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFpOZXZyb24uQ2hhcnQuV2luRm9ybSwgVmVyc2lvbj0xNy4xMC41
+        LjEyLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWM5YmQ4OTk4ZTk4MWU0ZWUFAQAAABtO
+        ZXZyb24uQ2hhcnQuV2luRm9ybS5OU3RhdGUBAAAAB21fQnl0ZXMHAgIAAAAKCw==
+</value>
+  </data>
+  <data name="ncc_bpm.State" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFpOZXZyb24uQ2hhcnQuV2luRm9ybSwgVmVyc2lvbj0xNy4xMC41
+        LjEyLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWM5YmQ4OTk4ZTk4MWU0ZWUFAQAAABtO
+        ZXZyb24uQ2hhcnQuV2luRm9ybS5OU3RhdGUBAAAAB21fQnl0ZXMHAgIAAAAKCw==
+</value>
+  </data>
+  <data name="ncc_acc.State" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFpOZXZyb24uQ2hhcnQuV2luRm9ybSwgVmVyc2lvbj0xNy4xMC41
+        LjEyLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWM5YmQ4OTk4ZTk4MWU0ZWUFAQAAABtO
+        ZXZyb24uQ2hhcnQuV2luRm9ybS5OU3RhdGUBAAAAB21fQnl0ZXMHAgIAAAAKCw==
+</value>
+  </data>
+  <metadata name="shellControlConnector1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>432, 17</value>
+  </metadata>
+  <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>316, 17</value>
+  </metadata>
+  <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>45</value>
+  </metadata>
 </root>
