@@ -56,10 +56,10 @@ namespace APTP_DB_flotting_project
     public struct GSR
     {
         public int user_idx;
-        public double gsr;
+        public int gsr;
         public DateTime timestamp;
 
-        public GSR(int user_dix, double gsr, DateTime timestamp)
+        public GSR(int user_dix, int gsr, DateTime timestamp)
         {
             this.user_idx = user_dix;
             this.gsr = gsr;
@@ -70,10 +70,10 @@ namespace APTP_DB_flotting_project
     public struct STRESS
     {
         public int user_idx;
-        public double stress;
+        public int stress;
         public DateTime timestamp;
 
-        public STRESS(int user_dix, double stress, DateTime timestamp)
+        public STRESS(int user_dix, int stress, DateTime timestamp)
         {
             this.user_idx = user_dix;
             this.stress = stress;
@@ -153,7 +153,7 @@ namespace APTP_DB_flotting_project
                             for (int s = 0; s < 60; s++)
                             {
                                 int user_idx = 1;
-                                int bpm = r.Next(50, 110);
+                                int bpm = r.Next(0, 200);
                                 DateTime timestamp = new DateTime(2017, 10, d, h, m, s);
                                 list_BPM.Add(new BPM(user_idx, bpm, timestamp));
                             }
@@ -372,7 +372,7 @@ namespace APTP_DB_flotting_project
                 while (rdr_GSR.Read())
                 {
                     int user_idx = rdr_GSR.GetInt32(rdr_GSR.GetOrdinal("user_idx"));
-                    double gsr = rdr_GSR.GetDouble(rdr_GSR.GetOrdinal("gsr"));
+                    int gsr = rdr_GSR.GetInt32(rdr_GSR.GetOrdinal("gsr"));
                     DateTime timestamp = rdr_GSR.GetDateTime(rdr_GSR.GetOrdinal("timestamp"));
 
                     list_GSR.Add(new GSR(user_idx, gsr, timestamp));
@@ -396,7 +396,7 @@ namespace APTP_DB_flotting_project
                 while (rdr_stress.Read())
                 {
                     int user_idx = rdr_stress.GetInt32(rdr_stress.GetOrdinal("user_idx"));
-                    double stress = rdr_stress.GetDouble(rdr_stress.GetOrdinal("stress"));
+                    int stress = rdr_stress.GetInt32(rdr_stress.GetOrdinal("stress"));
                     DateTime timestamp = rdr_stress.GetDateTime(rdr_stress.GetOrdinal("timestamp"));
 
                     list_STRESS.Add(new STRESS(user_idx, stress, timestamp));
@@ -494,7 +494,7 @@ namespace APTP_DB_flotting_project
                     for (DateTime time = cur_time.AddSeconds(-60); time < cur_time; time = time.AddSeconds(1))
                     {
                         int user_idx = given_idx;
-                        int bpm = r.Next(50, 110);
+                        int bpm = r.Next(0, 200);
                         list_BPM.Add(new BPM(user_idx, bpm, time));
                     }
                 }
@@ -514,7 +514,7 @@ namespace APTP_DB_flotting_project
                     for (DateTime time = cur_time.AddSeconds(-60); time < cur_time; time = time.AddSeconds(1))
                     {
                         int user_idx = given_idx;
-                        double gsr = r.NextDouble();
+                        int gsr = r.Next(0, 5000);
                         list_GSR.Add(new GSR(user_idx, gsr, time));
                     }
                 }
@@ -523,7 +523,7 @@ namespace APTP_DB_flotting_project
                     for (DateTime time = cur_time.AddSeconds(-60); time < cur_time; time = time.AddSeconds(1))
                     {
                         int user_idx = given_idx;
-                        double stress = r.NextDouble();
+                        int stress = r.Next(0, 100);
                         list_STRESS.Add(new STRESS(user_idx, stress, time));
                     }
                 }
@@ -545,16 +545,16 @@ namespace APTP_DB_flotting_project
                 double z = r.Next() % 2 == 0 ? r.NextDouble() : r.NextDouble() * -1;
                 list_ACC.Add(new ACC(user_idx, x, y, z, cur_time));
 
-                int bpm = r.Next(50, 110);
+                int bpm = r.Next(0, 200);
                 list_BPM.Add(new BPM(user_idx, bpm, cur_time));
 
                 double rri = r.NextDouble();
                 list_RRI.Add(new RRI(user_idx, rri, cur_time));
 
-                double gsr = r.NextDouble();
+                int gsr = r.Next(0, 5000);
                 list_GSR.Add(new GSR(user_idx, gsr, cur_time));
 
-                double stress = r.NextDouble();
+                int stress = r.Next(0, 100);
                 list_STRESS.Add(new STRESS(user_idx, stress, cur_time));
             }
         }        

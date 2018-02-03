@@ -309,7 +309,7 @@ namespace APTP_DB_flotting_project
             chart.BoundsMode = BoundsMode.Stretch;
 
             NAxis axis1 = chart.Axis(StandardAxis.PrimaryY);
-            ConfigureAxis(axis1, 0, 100, "RRI", -1, 2);
+            ConfigureAxis(axis1, 0, 100, "RRI", 0, 1);
 
             chart.Series.Clear();
 
@@ -346,7 +346,7 @@ namespace APTP_DB_flotting_project
             chart.BoundsMode = BoundsMode.Stretch;
 
             NAxis axis1 = chart.Axis(StandardAxis.PrimaryY);
-            ConfigureAxis(axis1, 0, 100, "BPM", 40, 130);
+            ConfigureAxis(axis1, 0, 100, "BPM", 0, 200);
 
             chart.Series.Clear();
 
@@ -383,7 +383,7 @@ namespace APTP_DB_flotting_project
             chart.BoundsMode = BoundsMode.Stretch;
 
             NAxis axis1 = chart.Axis(StandardAxis.PrimaryY);
-            ConfigureAxis(axis1, 0, 100, "GSR", -1, 2);
+            ConfigureAxis(axis1, 0, 100, "GSR", 0, 5000);
 
             chart.Series.Clear();
 
@@ -420,7 +420,7 @@ namespace APTP_DB_flotting_project
             chart.BoundsMode = BoundsMode.Stretch;
 
             NAxis axis1 = chart.Axis(StandardAxis.PrimaryY);
-            ConfigureAxis(axis1, 0, 100, "STRESS", -1, 2);
+            ConfigureAxis(axis1, 0, 100, "STRESS", 0, 100);
 
             chart.Series.Clear();
 
