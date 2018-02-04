@@ -174,7 +174,7 @@ namespace APTP_DB_flotting_project
             // configure the y axis
             NAxis yAxis = chart.Axis(StandardAxis.PrimaryY);
             //y축 범위 지정
-            yAxis.View = new NRangeAxisView(new NRange1DD(-2, 2));
+            yAxis.View = new NRangeAxisView(new NRange1DD(-1, 1));
 
             NLinearScaleConfigurator linearScale = yAxis.ScaleConfigurator as NLinearScaleConfigurator;
 
