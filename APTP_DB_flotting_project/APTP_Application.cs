@@ -33,13 +33,30 @@ namespace APTP_DB_flotting_project
             MessageBox.Show(e.ToString());
         }
 
+        private void shellListView1_BeforeInvokeCommandOnSelected(object sender, Jam.Shell.InvokeCommandEventArgs e)
+        {
+
+        }
+
         private void shellListView1_BeforeShellCommand(object sender, Jam.Shell.BeforeShellCommandEventArgs e)
         {
             MessageBox.Show(e.Paths.ToString());
             Stop();
             Thread.Sleep(1000);
-            Play(e.Paths.ToString());
+            try
+            {
+                Play(e.Paths.ToString());
+            }
+            catch(Exception exc)
+            {
+                Console.WriteLine(exc);
+            }
             e.ExecuteShellCommand = false;
+        }
+
+        private void APTP_application_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            
         }
         
         private mySqlLinkage msl;
@@ -103,9 +120,9 @@ namespace APTP_DB_flotting_project
                 m_ColorTable[i] = InterpolateColors(Color.Blue, Color.Red, i / 255.0f);
             }
             //fake data
-            this.msl.Realtime_FakeUserInfoGenerator();
+            //this.msl.Realtime_FakeUserInfoGenerator();
             //real data
-            //this.msl.Realtime_SelectUserInfoUsingReader();
+            this.msl.Realtime_SelectUserInfoUsingReader();
             SetcomboBox_id_Items();
             selected_user_id = -1;
             this.Realtime_InitializeBarACC();
@@ -119,10 +136,10 @@ namespace APTP_DB_flotting_project
         public void Realtime_OnTimerTick(object sender, EventArgs e)
         {
             //real data
-            //this.msl.Realtime_SelectUsingReader(selected_user_id);
+            this.msl.Realtime_SelectUsingReader(selected_user_id);
 
             //fake data
-            this.msl.Realtime_FakeDataGenerator(selected_user_id);
+            //this.msl.Realtime_FakeDataGenerator(selected_user_id);
 
             Realtime_UpdateBarACC();
             Realtime_UpdateLineBPM();
@@ -383,7 +400,7 @@ namespace APTP_DB_flotting_project
             chart.BoundsMode = BoundsMode.Stretch;
 
             NAxis axis1 = chart.Axis(StandardAxis.PrimaryY);
-            ConfigureAxis(axis1, 0, 100, "GSR", 0, 5000);
+            ConfigureAxis(axis1, 0, 100, "GSR", 0, 10000);
 
             chart.Series.Clear();
 
@@ -623,7 +640,12 @@ namespace APTP_DB_flotting_project
 
         public void Realtime_SetTimerLabel()
         {
-            label_time.Text = msl.list_ACC[0].timestamp.ToString(date_format) + " ~ " + msl.list_ACC[msl.list_ACC.Count - 1].timestamp.ToString(date_format);
+            if (msl.list_ACC.Count == 1)
+                label_time.Text = msl.list_ACC[0].timestamp.ToString(date_format) + " ~ " + msl.list_ACC[0].timestamp.ToString(date_format);
+            else if (msl.list_ACC.Count > 1)
+                label_time.Text = msl.list_ACC[0].timestamp.ToString(date_format) + " ~ " + msl.list_ACC[msl.list_ACC.Count - 1].timestamp.ToString(date_format);
+            else
+                Console.WriteLine("Error: Acc's count is lower than 1");
         }
 
         public void Realtime_SetLogTextBoxes()
@@ -1103,7 +1125,6 @@ namespace APTP_DB_flotting_project
             }
         }
         #endregion
-        
     }
 
 }

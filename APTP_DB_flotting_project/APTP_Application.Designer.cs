@@ -638,6 +638,8 @@
             this.shellListView1.ThumbnailBorderColor = System.Drawing.Color.LightGray;
             this.shellListView1.ThumbnailSize = new System.Drawing.Size(96, 96);
             this.shellListView1.UseCompatibleStateImageBehavior = false;
+            this.shellListView1.BeforeShellCommand += new System.EventHandler<Jam.Shell.BeforeShellCommandEventArgs>(this.shellListView1_BeforeShellCommand);
+            this.shellListView1.BeforeInvokeCommandOnSelected += new System.EventHandler<Jam.Shell.InvokeCommandEventArgs>(this.shellListView1_BeforeInvokeCommandOnSelected);
             // 
             // shellTreeView1
             // 
@@ -687,6 +689,7 @@
             this.Controls.Add(this.tabControl);
             this.Name = "APTP_Application";
             this.Text = "APTP_Application";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.APTP_application_FormClosing);
             this.tabControl.ResumeLayout(false);
             this.tp_visualizer.ResumeLayout(false);
             this.tp_visualizer.PerformLayout();

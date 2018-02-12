@@ -381,23 +381,25 @@ namespace APTP_DB_flotting_project
 
                 // ******************************* stress는 table 값 명에 따라 수정 필요
                 int stress_length;
-                string sql_stress_LENGTH = "SELECT count(*) from stress where user_idx = " + user_id.ToString();
+                string sql_stress_LENGTH = "SELECT count(*) from stless where user_idx = " + user_id.ToString();
                 MySqlCommand cmd_stress_LENGTH = new MySqlCommand(sql_stress_LENGTH, conn);
                 stress_length = Convert.ToInt32(cmd_stress_LENGTH.ExecuteScalar());
 
                 string sql_stress;
                 if (stress_length < 60)
-                    sql_stress = "SELECT * FROM stress where user_idx = " + user_id.ToString() + " LIMIT 0," + stress_length;
+                    sql_stress = "SELECT * FROM stless where user_idx = " + user_id.ToString() + " LIMIT 0," + stress_length;
                 else
-                    sql_stress = "SELECT * FROM stress where user_idx = " + user_id.ToString() + " LIMIT " + (stress_length - 60) + ",60";
+                    sql_stress = "SELECT * FROM stless where user_idx = " + user_id.ToString() + " ORDER BY timestamp ASC LIMIT " + (stress_length - 60) + ",60";
 
                 MySqlCommand cmd_stress = new MySqlCommand(sql_stress, conn);
                 MySqlDataReader rdr_stress = cmd_stress.ExecuteReader();
                 while (rdr_stress.Read())
                 {
                     int user_idx = rdr_stress.GetInt32(rdr_stress.GetOrdinal("user_idx"));
-                    int stress = rdr_stress.GetInt32(rdr_stress.GetOrdinal("stress"));
-                    DateTime timestamp = rdr_stress.GetDateTime(rdr_stress.GetOrdinal("timestamp"));
+                    int stress = rdr_stress.GetInt32(rdr_stress.GetOrdinal("stress_value"));
+                    String strDate = rdr_stress.GetString(rdr_stress.GetOrdinal("timestamp"));
+                    strDate.Trim();
+                    DateTime timestamp = Convert.ToDateTime(strDate);
 
                     list_STRESS.Add(new STRESS(user_idx, stress, timestamp));
                 }
